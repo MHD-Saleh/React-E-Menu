@@ -2,7 +2,17 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
-import { Box, Card, Link, Typography, Stack, Grid, Badge } from "@mui/material";
+import {
+  Box,
+  Card,
+  Link,
+  Typography,
+  Stack,
+  Grid,
+  Badge,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -17,6 +27,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 // component
 
@@ -72,6 +84,17 @@ const secondery = {
 };
 
 export default function ProductList({ ...other }) {
+  const [Type, setType] = useState("");
+  const [type_Id, settype_Id] = useState([]);
+  const [CrtType, setCrtType] = useState();
+
+  const handel_type = (event) => {
+    setType(event.target.value);
+    //console.log(type_Id[event.target.value - 1].id);
+    setCrtType(type_Id[event.target.value - 1].id);
+    //console.log("this is my select ", type_Id[0].id);
+  };
+
   const [openAlert, setopenAlert] = useState(false);
 
   const handelClick = () => {
@@ -82,7 +105,7 @@ export default function ProductList({ ...other }) {
     if (reason === "clickaway") {
       return;
     }
-    openAlert(false);
+    setopenAlert(false);
   };
   const navigate = useNavigate();
   const [dish, setdishs] = useState([]);
@@ -108,12 +131,12 @@ export default function ProductList({ ...other }) {
     setEdit(false);
   };
 
-  const [post, setPost] = React.useState(null);
-
   const [state, setState] = useState({
     ItemName: "",
+    TypeId: "",
     Price: "",
     PriceSale: "",
+    Time: "",
     Img: "",
     desc: "",
   });
@@ -122,18 +145,37 @@ export default function ProductList({ ...other }) {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
+  const TypeCatogory = async () => {
+    //http://127.0.0.1:8000/api/typeView
+    await axios
+      .get("http://localhost:8000/api/typeView")
+      .then((res) => {
+        console.log("Type Date", res.data);
+        settype_Id(res.data);
+      })
+      .catch((err) => {
+        console.log("errrrrrrrrrrr", err.response.status);
+        if (err.response.status === 401) {
+          localStorage.removeItem("islogin");
+          console.log("found error");
+          navigate("/login");
+        }
+      });
+  };
+
   const createPost = () => {
     axios
-      .post("http://localhost:3004/Menu", {
+      .post("http://localhost:8000/api/productStore", {
         name: state.ItemName,
+        type_id: CrtType,
+        time: 5,
         price: state.Price,
-        cover: state.Img,
+        image: state.Img,
         priceSale: state.PriceSale,
         status: checked === true ? "sale" : "",
-        desc: state.desc,
+        details: state.desc,
       })
       .then((response) => {
-        setPost(response.data);
         console.log(response.data);
       });
   };
@@ -142,22 +184,21 @@ export default function ProductList({ ...other }) {
     console.log("trying update");
 
     axios
-      .put(`http://localhost:3004/Menu/${dd}`, {
+      .post(`http://localhost:8000/api/productEdit/${dd}`, {
         name: EName,
         price: Eprice,
         priceSale: EPriceSale,
         status: EStatus === true ? "sale" : "",
-        desc: Edesc,
-        cover: EImg,
+        details: Edesc,
+        image: EImg,
       })
       .then((response) => {
-        setPost(response.data);
         console.log(response.data);
       });
   };
 
   const deleteItem = (dd) => {
-    axios.delete(`http://localhost:3004/Menu/${dd}`).then(() => {
+    axios.delete(`http://localhost:8000/api/productDelete/${dd}`).then(() => {
       alert("Item Deleted!");
     });
   };
@@ -190,6 +231,7 @@ export default function ProductList({ ...other }) {
 
   useEffect(() => {
     GetMenu();
+    TypeCatogory();
   }, [update]);
 
   const [checked, setChecked] = React.useState(false);
@@ -216,6 +258,11 @@ export default function ProductList({ ...other }) {
   const [EImg, setEImg] = useState("");
   const [Edesc, setEdesc] = useState("");
   const [EStatus, setEStatus] = useState();
+  const [Etype, setEtype] = useState();
+
+  const handleEtype = (event) => {
+    setEtype(event.target.value);
+  };
 
   const handlesetEStatus = (event) => {
     setEStatus(event.target.checked);
@@ -241,7 +288,10 @@ export default function ProductList({ ...other }) {
     <div>
       <RootStyle>
         <Badge
-          onClick={handleClickOpen}
+          onClick={() => {
+            handleClickOpen();
+            handelClick();
+          }}
           showZero
           badgeContent={dish.length}
           color="error"
@@ -251,13 +301,13 @@ export default function ProductList({ ...other }) {
         </Badge>
       </RootStyle>
       <Snackbar
-        open={open}
+        open={openAlert}
         onClose={handelClose}
         autoHideDuration={3000}
         //message="test Snack"
       >
-        <Alert onClose={handelClose} severity="error">
-          this is message
+        <Alert onClose={handelClose} severity="warning">
+          please Fill all Input
         </Alert>
       </Snackbar>
       <Grid container spacing={3}>
@@ -280,7 +330,7 @@ export default function ProductList({ ...other }) {
                     {dishes.status}
                   </Label>
                 )}
-                <ProductImgStyle alt={dishes.name} src={dishes.cover} />
+                <ProductImgStyle alt={dishes.name} src={dishes.image} />
               </Box>
 
               <Stack spacing={2} sx={{ p: 3 }}>
@@ -294,12 +344,13 @@ export default function ProductList({ ...other }) {
                     variant="subtitle2"
                     noWrap
                     onClick={() => {
+                      setEtype(dishes.type_id);
                       console.log(dishes.name);
                       setEname(dishes.name);
                       setEprice(dishes.price);
                       setEPriceSale(dishes.priceSale);
-                      setEImg(dishes.cover);
-                      setEdesc(dishes.desc);
+                      setEImg(dishes.image);
+                      setEdesc(dishes.details);
                       setEdit(true);
                       setEID(dishes.id);
                       if (dishes.status === "sale") {
@@ -385,7 +436,7 @@ export default function ProductList({ ...other }) {
             helperText={state.Price === "" ? "Please Enter price" : ""}
           />
           <TextField
-            margin="normal"
+            margin="dense"
             id="PriceSale"
             label="Item Price after Sale"
             type="number"
@@ -409,7 +460,7 @@ export default function ProductList({ ...other }) {
           </FormGroup>
 
           <TextField
-            margin="normal"
+            margin="dense"
             id="Img"
             label="Item image Link"
             type="text"
@@ -432,6 +483,24 @@ export default function ProductList({ ...other }) {
             error={state.desc === ""}
             helperText={state.desc === "" ? "Please Enter Description" : ""}
           />
+          <FormControl fullWidth>
+            <InputLabel id="type-menu">select Type</InputLabel>
+            <Select
+              margin="dense"
+              labelId="type-menu"
+              id="type-menu"
+              value={Type}
+              label="select"
+              onChange={handel_type}
+              autoWidth
+            >
+              {type_Id.map((this_type) => (
+                <MenuItem key={this_type.id} value={this_type.id}>
+                  {this_type.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
@@ -538,6 +607,24 @@ export default function ProductList({ ...other }) {
             error={Edesc === ""}
             helperText={Edesc === "" ? "Please Enter Description" : ""}
           />
+          <FormControl fullWidth>
+            <InputLabel id="type-menu">select Type</InputLabel>
+            <Select
+              margin="dense"
+              labelId="type-menu"
+              id="type-menu"
+              value={Etype}
+              label="select"
+              onChange={handel_type}
+              autoWidth
+            >
+              {type_Id.map((this_type) => (
+                <MenuItem key={this_type.id} value={this_type.id}>
+                  {this_type.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditClose}>Cancel</Button>
