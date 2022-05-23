@@ -180,12 +180,14 @@ export default function ProductList({ ...other }) {
       });
   };
 
-  const updateItem = (dd) => {
+  const updateItem = async (dd) => {
     console.log("trying update");
 
-    axios
+    await axios
       .post(`http://localhost:8000/api/productEdit/${dd}`, {
         name: EName,
+        type_id: 1,
+        time: 5,
         price: Eprice,
         priceSale: EPriceSale,
         status: EStatus === true ? "sale" : "",
@@ -230,6 +232,7 @@ export default function ProductList({ ...other }) {
   };
 
   useEffect(() => {
+    console.log("updatinggggggg useEffect");
     GetMenu();
     TypeCatogory();
   }, [update]);
@@ -516,8 +519,8 @@ export default function ProductList({ ...other }) {
                 setUpdate(!update);
               } else {
                 createPost();
-                handleClose();
                 setUpdate(!update);
+                handleClose();
               }
             }}
           >
@@ -631,8 +634,8 @@ export default function ProductList({ ...other }) {
           <Button
             onClick={() => {
               updateItem(EID);
-              handleEditClose();
               setUpdate(!update);
+              handleEditClose();
             }}
           >
             Update

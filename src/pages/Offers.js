@@ -1,9 +1,26 @@
 import Button from "@mui/material/Button";
 import SB from "../componant/SB";
+import pusherJs from "pusher-js";
 
 import React, { useState } from "react";
 
 const Offers = () => {
+  // Enable pusher logging
+  /* pusherJs.logToConsole = true;
+  // pusherJs
+
+  var pusher = new pusherJs("9aa6bd46d4105d1a9109", {
+    cluster: "ap2",
+  });
+
+  var channel = pusher.subscribe("saleh-channel");
+  channel.bind("event-pusher", function (data) {
+    console.error("pusher Says : ", data.data.message);
+    setmsg(data.data.message);
+    handelClickGreen();
+    //alert(JSON.stringify(data));
+  });
+  const [msg, setmsg] = useState();*/
   const [openRed, setopenR] = useState(false);
   const [openGreen, setopenG] = useState(false);
 
@@ -46,7 +63,7 @@ const Offers = () => {
         open={openGreen}
         handelClose={handelCloseGreen}
         type="success"
-        message="test Success from SB hook"
+        message="{msg}"
         time={3000}
       />
     </div>

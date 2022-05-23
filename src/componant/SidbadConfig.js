@@ -24,6 +24,11 @@ const sidebarConfig = [
     icon: getIcon("eva:shopping-bag-fill"),
   },
   {
+    title: "Edit Menu",
+    path: "/dashboard/AddToMenu",
+    icon: getIcon("eva:flip-2-fill"),
+  },
+  {
     title: "Offers",
     path: "/dashboard/Offers",
     icon: getIcon("eva:file-text-fill"),
