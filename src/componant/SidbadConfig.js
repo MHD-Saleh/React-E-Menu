@@ -11,7 +11,7 @@ const sidebarConfig = [
   {
     title: "dashboard",
     path: "/dashboard/app",
-    icon: getIcon("eva:pie-chart-2-fill"),
+    icon: getIcon("eva:home-fill"),
   },
   {
     title: "user",
@@ -32,6 +32,11 @@ const sidebarConfig = [
     title: "Offers",
     path: "/dashboard/Offers",
     icon: getIcon("eva:file-text-fill"),
+  },
+  {
+    title: "Reports",
+    path: "/dashboard/Reports",
+    icon: getIcon("eva:pie-chart-2-fill"),
   },
 
   {

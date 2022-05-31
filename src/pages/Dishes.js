@@ -38,6 +38,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 //
 import Label from "../componant/Label";
+import { DashboardApiKey } from "../componant/Dashboard-Api";
 //import Isauthed from "../componant/ChickAuth";
 
 // ----------------------------------------------------------------------
@@ -177,6 +178,7 @@ export default function ProductList({ ...other }) {
       })
       .then((response) => {
         console.log(response.data);
+        GetMenu();
       });
   };
 
@@ -196,12 +198,14 @@ export default function ProductList({ ...other }) {
       })
       .then((response) => {
         console.log(response.data);
+        GetMenu();
       });
   };
 
   const deleteItem = (dd) => {
     axios.delete(`http://localhost:8000/api/productDelete/${dd}`).then(() => {
       alert("Item Deleted!");
+      GetMenu();
     });
   };
 
@@ -234,6 +238,7 @@ export default function ProductList({ ...other }) {
   useEffect(() => {
     console.log("updatinggggggg useEffect");
     GetMenu();
+
     TypeCatogory();
   }, [update]);
 
@@ -337,35 +342,47 @@ export default function ProductList({ ...other }) {
               </Box>
 
               <Stack spacing={2} sx={{ p: 3 }}>
-                <Link
-                  to="#"
-                  color="inherit"
-                  underline="hover"
-                  component={RouterLink}
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
                 >
-                  <Typography
-                    variant="subtitle2"
-                    noWrap
-                    onClick={() => {
-                      setEtype(dishes.type_id);
-                      console.log(dishes.name);
-                      setEname(dishes.name);
-                      setEprice(dishes.price);
-                      setEPriceSale(dishes.priceSale);
-                      setEImg(dishes.image);
-                      setEdesc(dishes.details);
-                      setEdit(true);
-                      setEID(dishes.id);
-                      if (dishes.status === "sale") {
-                        setEStatus(true);
-                      } else {
-                        setEStatus(false);
-                      }
-                    }}
+                  <Link
+                    to="#"
+                    color="inherit"
+                    underline="hover"
+                    component={RouterLink}
                   >
-                    {dishes.name}
-                  </Typography>
-                </Link>
+                    <Iconify
+                      sx={{ color: "Green" }}
+                      icon="eva:edit-2-fill"
+                      width={20}
+                      height={20}
+                    />
+                    <Typography
+                      variant="subtitle2"
+                      noWrap
+                      onClick={() => {
+                        setEtype(dishes.type_id);
+                        console.log(dishes.name);
+                        setEname(dishes.name);
+                        setEprice(dishes.price);
+                        setEPriceSale(dishes.priceSale);
+                        setEImg(dishes.image);
+                        setEdesc(dishes.details);
+                        setEdit(true);
+                        setEID(dishes.id);
+                        if (dishes.status === "sale") {
+                          setEStatus(true);
+                        } else {
+                          setEStatus(false);
+                        }
+                      }}
+                    >
+                      {dishes.name}
+                    </Typography>
+                  </Link>
+                </Stack>
 
                 <Stack
                   direction="row"

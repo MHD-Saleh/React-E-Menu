@@ -60,6 +60,9 @@ export default function LoginForm() {
         //navigate("/second");
         localStorage.setItem("islogin", "true");
         console.log("navigate to dishes");
+        // navigate("/dashboard/Dishes", { replace: true });
+      })
+      .then(() => {
         navigate("/dashboard/Dishes", { replace: true });
       })
       .catch((error) => {

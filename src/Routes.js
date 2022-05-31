@@ -7,6 +7,8 @@ import Login from "./pages/Login";
 import Offers from "./pages/Offers";
 import Home from "./pages/Home";
 import Add2Menu from "./pages/Add2Menu";
+import Reports from "./pages/Reports";
+import LabTabs from "./pages/Tabs";
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +21,9 @@ export default function Router() {
         { path: "first", element: <First /> },
         { path: "Dishes", element: <ProductList /> },
         { path: "offers", element: <Offers /> },
-        { path: "AddToMenu", element: <Add2Menu /> },
+        { path: "AddToMenu", element: <Add2Menu /> }, //LabTabs
+        { path: "Reports", element: <LabTabs /> },
+        { path: "user", element: <LabTabs /> },
         // { path: 'blog', element: <Blog /> }
       ],
     },

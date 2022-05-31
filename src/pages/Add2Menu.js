@@ -13,179 +13,10 @@ import {
   Typography,
 } from "@mui/material";
 import { red } from "@mui/material/colors";
+import SB from "../componant/SB";
+import { useNavigate } from "react-router-dom";
 
-const columns = [
-  {
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    width: 100,
-    field: "action",
-    headerName: "Action",
-    sortable: false,
-    renderCell: (params) => {
-      const onClick = (e) => {
-        e.stopPropagation(); // don't select this row after clicking
-
-        const api: GridApi = params.api;
-        const thisRow: Record<string, GridCellValue> = {};
-
-        api
-          .getAllColumns()
-          .filter((c) => c.field !== "__check__" && !!c)
-          .forEach(
-            (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-          );
-
-        return alert(JSON.stringify(thisRow, null, 4));
-      };
-
-      return (
-        /* <IconButton aria-label="delete">
-      <DeleteIcon color="error" />
-    </IconButton>*/
-        <Button
-          size="small"
-          variant="contained"
-          color="error"
-          onClick={onClick}
-        >
-          Delete
-        </Button>
-      );
-    },
-  },
-
-  {
-    field: "id",
-    headerName: "ID",
-    width: 60,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    headerAlign: "center",
-    field: "name",
-    headerName: "Name",
-    width: 110,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    headerAlign: "center",
-    field: "price",
-    headerName: "Price",
-    width: 100,
-    type: "number",
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    headerAlign: "center",
-    field: "time",
-    headerName: "Time",
-    type: "number",
-    width: 80,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    headerAlign: "center",
-    field: "type",
-    headerName: "Type",
-    width: 120,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    headerAlign: "center",
-    field: "created_at",
-    headerName: "Created at",
-    width: 120,
-    headerClassName: "super-app-theme--header",
-  },
-];
-
-const columns2 = [
-  {
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    width: 100,
-    field: "action",
-    headerName: "Action",
-    sortable: false,
-    renderCell: (params) => {
-      const onClick = (e) => {
-        e.stopPropagation(); // don't select this row after clicking
-
-        const api: GridApi = params.api;
-        const thisRow: Record<string, GridCellValue> = {};
-
-        api
-          .getAllColumns()
-          .filter((c) => c.field !== "__check__" && !!c)
-          .forEach(
-            (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-          );
-
-        return alert(JSON.stringify(thisRow, null, 4));
-      };
-
-      return (
-        /* <IconButton aria-label="delete">
-        <DeleteIcon color="error" />
-      </IconButton>*/
-        <Button
-          size="small"
-          variant="contained"
-          color="primary"
-          onClick={onClick}
-        >
-          Add
-        </Button>
-      );
-    },
-  },
-
-  {
-    field: "id",
-    headerName: "ID",
-    width: 60,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    headerAlign: "center",
-    field: "name",
-    headerName: "Name",
-    width: 110,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    headerAlign: "center",
-    field: "price",
-    headerName: "Price",
-    width: 100,
-    type: "number",
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    headerAlign: "center",
-    field: "time",
-    headerName: "Time",
-    type: "number",
-    width: 80,
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    headerAlign: "center",
-    field: "type",
-    headerName: "Type",
-    width: 120,
-    headerClassName: "super-app-theme--header",
-  },
-  //created_at
-  {
-    headerAlign: "center",
-    field: "created_at",
-    headerName: "Created at",
-    width: 120,
-    headerClassName: "super-app-theme--header",
-  },
-];
+//  console.log("windows location", window.location.origin);
 
 const rows = [
   { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
@@ -228,6 +59,174 @@ const theme = createTheme({
 });
 
 const Add2Menu = () => {
+  const navigate = useNavigate();
+  const columns2 = [
+    {
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      width: 100,
+      field: "action",
+      headerName: "Action",
+      sortable: false,
+      renderCell: (params) => {
+        const onClick = (e) => {
+          e.stopPropagation(); // don't select this row after clicking
+
+          console.log(params.id);
+
+          AddMainMenu(params.id);
+        };
+
+        return (
+          /* <IconButton aria-label="delete">
+      <DeleteIcon color="error" />
+    </IconButton>*/
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={onClick}
+          >
+            ADD
+          </Button>
+        );
+      },
+    },
+
+    {
+      field: "id",
+      headerName: "ID",
+      width: 60,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      headerAlign: "center",
+      field: "name",
+      headerName: "Name",
+      width: 110,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      headerAlign: "center",
+      field: "price",
+      headerName: "Price",
+      width: 100,
+      type: "number",
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      headerAlign: "center",
+      field: "time",
+      headerName: "Time",
+      type: "number",
+      width: 80,
+      headerClassName: "super-app-theme--header",
+    },
+
+    //created_at
+    {
+      headerAlign: "center",
+      field: "created_at",
+      headerName: "Created at",
+      width: 150,
+      headerClassName: "super-app-theme--header",
+    },
+  ];
+
+  const columns = [
+    {
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      width: 100,
+      field: "action",
+      headerName: "Action",
+      sortable: false,
+      renderCell: (params) => {
+        const onClick = (e) => {
+          e.stopPropagation(); // don't select this row after clicking
+
+          console.log(params.id);
+          DeleteMainMenu(params.id);
+        };
+
+        return (
+          /* <IconButton aria-label="delete">
+      <DeleteIcon color="error" />
+    </IconButton>*/
+          <Button
+            size="small"
+            variant="contained"
+            color="error"
+            onClick={onClick}
+          >
+            Delete
+          </Button>
+        );
+      },
+    },
+
+    {
+      field: "id",
+      headerName: "ID",
+      width: 60,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      headerAlign: "center",
+      field: "name",
+      headerName: "Name",
+      width: 110,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      headerAlign: "center",
+      field: "price",
+      headerName: "Price",
+      width: 100,
+      type: "number",
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      headerAlign: "center",
+      field: "time",
+      headerName: "Time",
+      type: "number",
+      width: 80,
+      headerClassName: "super-app-theme--header",
+    },
+
+    {
+      headerAlign: "center",
+      field: "created_at",
+      headerName: "Created at",
+      width: 150,
+      headerClassName: "super-app-theme--header",
+    },
+  ];
+
+  const [openSuccess, setopenSuccess] = useState(false);
+  const [openError, setopenError] = useState(false);
+
+  const handelClickSuccess = () => {
+    setopenSuccess(true);
+  };
+  const handelCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setopenSuccess(false);
+  };
+
+  const handelClickError = () => {
+    setopenError(true);
+  };
+  const handelCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setopenError(false);
+  };
+
   //http://127.0.0.1:8000/api/outOfMenu
   const [prod_id, setprod_id] = useState();
 
@@ -259,43 +258,80 @@ const Add2Menu = () => {
 
   //http://127.0.0.1:8000/api/Menu
 
-  const [after, setafter] = useState([]);
-
   /*const detailsRows = after.map((row) => {
     return {
       id: row.id,
     };
   });*/
 
-  const convert = (tt) => {
-    const detailsRows = tt.map((row) => {
-      return {
-        id: row.item_id,
-      };
-    });
-  };
   const [tableData, setTableData] = useState([]);
 
   const testget = async () => {
     await axios
       .get("http://localhost:8000/api/Menu")
       .then((data) => data.json())
-      .then((data) => setTableData(data));
+      .then((data) => setTableData(data))
+      .catch((err) => {
+        console.log("errror ", err.response.status);
+      });
   };
+
+  const [sa, setsa] = useState([]);
 
   const GetAfter = async () => {
     await axios
       .get("http://localhost:8000/api/Menu")
       .then((res) => {
-        console.log("After Data", res.data[0].product);
-        setafter(res.data[0].product);
-        var resulte = res.data[0].product;
+        console.log("After Data", res.data);
+        setsa(res.data);
+        console.log("menu", res.data[0].menu[0].id);
       })
 
       .catch((err) => {
-        console.log("errrrrrrrrrrr", err.response.status);
+        console.log("errror from get after with code", err.response.status);
+        if (err.response.status === 401) {
+          localStorage.removeItem("islogin");
+          console.log("found error");
+          navigate("/login");
+        }
       });
   };
+
+  //Store To Actual Menu
+  //http://127.0.0.1:8000/api/menuStore
+  const AddMainMenu = async (id) => {
+    await axios
+      .post("http://localhost:8000/api/menuStore", {
+        product_id: id,
+      })
+      .then((response) => {
+        console.log("post to menu log: ", response.data);
+        GetAfter();
+        GetBefore();
+        handelClickSuccess();
+      })
+      .catch((error) => {
+        console.log("error with posting add to menu", error);
+        handelClickError();
+      });
+  };
+
+  //delete from Actual Menu
+  //http://127.0.0.1:8000/api/menuDelete/2
+  const DeleteMainMenu = async (id) => {
+    await axios
+      .delete(`http://localhost:8000/api/menuDelete/${id}`)
+      .then((response) => {
+        console.log("post to menu log: ", response.data);
+        GetAfter();
+        GetBefore();
+      })
+      .catch((error) => {
+        handelClickError();
+        console.log("error with posting add to menu", error);
+      });
+  };
+
   useEffect(() => {
     console.log("load Add2Menu page");
     GetAfter();
@@ -322,7 +358,7 @@ const Add2Menu = () => {
           </Typography>
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={before}
+              rows={sa}
               columns={columns}
               pageSize={5}
               rowsPerPageOptions={[5]}
@@ -371,6 +407,20 @@ const Add2Menu = () => {
           />
         </div>
       </div>
+      <SB
+        open={openSuccess}
+        handelClose={handelCloseSuccess}
+        type="success"
+        message="Done"
+        time={3000}
+      />
+      <SB
+        open={openError}
+        handelClose={handelCloseError}
+        type="error"
+        message="error!"
+        time={3000}
+      />
     </div>
   );
 };

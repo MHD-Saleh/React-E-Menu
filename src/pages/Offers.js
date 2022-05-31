@@ -6,7 +6,7 @@ import React, { useState } from "react";
 
 const Offers = () => {
   // Enable pusher logging
-  /* pusherJs.logToConsole = true;
+  pusherJs.logToConsole = true;
   // pusherJs
 
   var pusher = new pusherJs("9aa6bd46d4105d1a9109", {
@@ -20,7 +20,7 @@ const Offers = () => {
     handelClickGreen();
     //alert(JSON.stringify(data));
   });
-  const [msg, setmsg] = useState();*/
+  const [msg, setmsg] = useState();
   const [openRed, setopenR] = useState(false);
   const [openGreen, setopenG] = useState(false);
 
@@ -63,7 +63,7 @@ const Offers = () => {
         open={openGreen}
         handelClose={handelCloseGreen}
         type="success"
-        message="{msg}"
+        message={msg}
         time={3000}
       />
     </div>
