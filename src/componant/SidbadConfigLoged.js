@@ -1,11 +1,11 @@
 // component
-import Iconify from "../componant/Iconify";
+import Iconify from "./Iconify";
 
 // ----------------------------------------------------------------------
 
 const getIcon = (name) => <Iconify icon={name} width={22} height={22} />;
 
-const sidebarConfig = [
+const sidebarConfigLoged = [
   //localStorage.setItem("islogin", "true");
 
   {
@@ -14,7 +14,7 @@ const sidebarConfig = [
     icon: getIcon("eva:home-fill"),
   },
   {
-    title: "user",
+    title: "customer List",
     path: "/dashboard/user",
     icon: getIcon("eva:people-fill"),
   },
@@ -46,4 +46,4 @@ const sidebarConfig = [
   },
 ];
 
-export default sidebarConfig;
+export default sidebarConfigLoged;

@@ -7,8 +7,8 @@ import Login from "./pages/Login";
 import Offers from "./pages/Offers";
 import Home from "./pages/Home";
 import Add2Menu from "./pages/Add2Menu";
-import Reports from "./pages/Reports";
 import LabTabs from "./pages/Tabs";
+import User from "./pages/UsersList";
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ export default function Router() {
         { path: "offers", element: <Offers /> },
         { path: "AddToMenu", element: <Add2Menu /> }, //LabTabs
         { path: "Reports", element: <LabTabs /> },
-        { path: "user", element: <LabTabs /> },
+        { path: "user", element: <User /> },
         // { path: 'blog', element: <Blog /> }
       ],
     },
