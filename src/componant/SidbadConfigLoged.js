@@ -10,7 +10,7 @@ const sidebarConfigLoged = [
 
   {
     title: "dashboard",
-    path: "/dashboard/app",
+    path: "/dashboard/main",
     icon: getIcon("eva:home-fill"),
   },
   {

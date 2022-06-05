@@ -10,6 +10,7 @@ import { Card, Stack, Link, Container, Typography } from "@mui/material";
 // components
 import Page from "../componant/page";
 import LoginForm from "../componant/loginform";
+import { padding } from "@mui/system";
 
 // ----------------------------------------------------------------------
 
@@ -32,7 +33,7 @@ const ContentStyle = styled("div")(({ theme }) => ({
   maxWidth: 480,
   margin: "auto",
   display: "flex",
-  minHeight: "100vh",
+  minHeight: "50",
   flexDirection: "column",
   justifyContent: "center",
   padding: 2,
@@ -59,8 +60,8 @@ export default function Login() {
   };
   return (
     <RootStyle title="Login To E-Menu">
-      <SectionStyle sx={{ display: { xs: "none", md: "flex" } }}>
-        <Typography variant="h3">Hi, Welcome Back</Typography>
+      <SectionStyle sx={{ display: { xs: "none", md: "flex", padding: 20 } }}>
+        <Typography variant="h3"> Hi, Welcome Back</Typography>
         <img src="/static/illustrations/illustration_login.png" alt="login" />
       </SectionStyle>
 

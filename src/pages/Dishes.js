@@ -122,8 +122,6 @@ export default function ProductList({ ...other }) {
 
   const [edit, setEdit] = React.useState(false);
 
-  const [update, setUpdate] = React.useState(false);
-
   const handleEditOpen = () => {
     setEdit(true);
   };
@@ -240,7 +238,7 @@ export default function ProductList({ ...other }) {
     GetMenu();
 
     TypeCatogory();
-  }, [update]);
+  }, []);
 
   const [checked, setChecked] = React.useState(false);
 
@@ -406,7 +404,6 @@ export default function ProductList({ ...other }) {
                   <Button
                     onClick={() => {
                       deleteItem(dishes.id);
-                      setUpdate(!update);
                     }}
                     variant="contained"
                     color="error"
@@ -533,10 +530,9 @@ export default function ProductList({ ...other }) {
                 state.desc === ""
               ) {
                 handleClose();
-                setUpdate(!update);
               } else {
                 createPost();
-                setUpdate(!update);
+
                 handleClose();
               }
             }}
@@ -651,7 +647,7 @@ export default function ProductList({ ...other }) {
           <Button
             onClick={() => {
               updateItem(EID);
-              setUpdate(!update);
+
               handleEditClose();
             }}
           >

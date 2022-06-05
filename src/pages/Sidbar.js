@@ -19,10 +19,6 @@ import NavSection from "../componant/NavSection";
 import QrCodeModal from "../componant/QRCodeModal";
 import sidebarConfigLoged from "../componant/SidbadConfigLoged";
 import sidebarConfigNotLoged from "../componant/sideBarConfigNot";
-import { Cookie, CookieSharp } from "@mui/icons-material";
-import ReactToPrint from "react-to-print";
-import { ComponentToPrint } from "./componantToPrint";
-import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 
 // ----------------------------------------------------------------------

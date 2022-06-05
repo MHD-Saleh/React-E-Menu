@@ -37,6 +37,7 @@ export default function LoginForm() {
     Chick();
   }, []);
   const [open, setopen] = useState(true);
+  const [message, setmessage] = useState("error");
 
   const handelClick = () => {
     setopen(true);
@@ -68,6 +69,13 @@ export default function LoginForm() {
       .catch((error) => {
         console.log(error);
         console.log("errrrrrrrrrrr from log in", error.response.status);
+        if (error.response.status === 500) {
+          handelClick();
+          setmessage("error 500 chick database");
+        } else if (error.response.status === 422) {
+          handelClick();
+          setmessage("Wrong Email or password");
+        }
       });
   };
   const navigate = useNavigate();
@@ -179,7 +187,7 @@ export default function LoginForm() {
         //message="test Snack"
       >
         <Alert onClose={handelClose} severity="error">
-          Wrong Feilds
+          {message}
         </Alert>
       </Snackbar>
     </>

@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Add2Menu from "./pages/Add2Menu";
 import LabTabs from "./pages/Tabs";
 import User from "./pages/UsersList";
+import MainDashboard from "./pages/MainDashboard";
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +19,7 @@ export default function Router() {
       path: "/dashboard",
       element: <DashboardLayout />,
       children: [
+        { path: "main", element: <MainDashboard /> },
         { path: "first", element: <First /> },
         { path: "Dishes", element: <ProductList /> },
         { path: "offers", element: <Offers /> },

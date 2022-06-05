@@ -1,21 +1,21 @@
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 // material
 import { styled } from "@mui/material/styles";
-//
-
 import DashboardSidebar from "./Sidbar";
+import axios from "axios";
 //import DashboardNavbar from "../componant/MyNavBar";
 
 // ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 64;
-const APP_BAR_DESKTOP = 92;
+const APP_BAR_DESKTOP = 10;
 
 const RootStyle = styled("div")({
   display: "flex",
   minHeight: "100%",
   overflow: "hidden",
+  backgroundColor: "#eee",
 });
 
 const MainStyle = styled("div")(({ theme }) => ({
@@ -34,14 +34,24 @@ const MainStyle = styled("div")(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function DashboardLayout() {
-  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const GetMenu = async () => {
+    await axios.get("http://localhost:8000/api/productView").catch((err) => {
+      if (err.response.status === 401) {
+        localStorage.removeItem("islogin");
+        navigate("/login");
+      }
+    });
+  };
+
+  useEffect(() => {
+    GetMenu();
+  }, []);
 
   return (
     <RootStyle>
-      <DashboardSidebar
-        isOpenSidebar={open}
-        onCloseSidebar={() => setOpen(false)}
-      />
+      <DashboardSidebar isOpenSidebar={true} onCloseSidebar={() => false} />
       <MainStyle>
         <Outlet />
       </MainStyle>
