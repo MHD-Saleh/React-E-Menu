@@ -10,6 +10,7 @@ import Add2Menu from "./pages/Add2Menu";
 import LabTabs from "./pages/Tabs";
 import User from "./pages/UsersList";
 import MainDashboard from "./pages/MainDashboard";
+import Welcome from "./pages/FirstTime";
 
 // ----------------------------------------------------------------------
 
@@ -37,6 +38,7 @@ export default function Router() {
         { path: "home", element: <Home /> },
         { path: "login", element: <Login /> },
         { path: "404", element: <Page404 /> },
+        { path: "welcome", element: <Welcome /> },
         { path: "*", element: <Navigate to="/404" /> },
       ],
     },

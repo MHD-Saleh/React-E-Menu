@@ -55,44 +55,20 @@ const New_TABLE_HEAD = [
 const USERLIST = [
   {
     id: 1,
-    avatarUrl: "test",
     name: "saleh",
-    company: "saleh com",
-    salary: 1000,
-    isVerified: "true",
-    status: "active",
-    role: "Main admin",
-  },
-  {
+    phone: "0968426511",
+    points: 0,
+    created_at: "2022-05-29T12:01:38.000000Z",
+    updated_at: "2022-05-29T12:01:38.000000Z"
+},
+{
     id: 2,
-    avatarUrl: "test",
-    name: "ghaith",
-    company: "saleh com",
-    salary: 100,
-    isVerified: "no",
-    status: "banned",
-    role: "bitch",
-  },
-  {
-    id: 3,
-    avatarUrl: "test",
-    name: "yazan",
-    company: "saleh com",
-    salary: 75,
-    isVerified: "yes",
-    status: "active",
-    role: "bitch",
-  },
-  {
-    id: 4,
-    avatarUrl: "test",
-    name: "user",
-    company: "others com",
-    salary: 10000,
-    isVerified: "no",
-    status: "banned",
-    role: "vip",
-  },
+    name: "mhd",
+    phone: "0992278948",
+    points: 0,
+    created_at: "2022-06-05T17:23:28.000000Z",
+    updated_at: "2022-06-05T17:23:28.000000Z"
+}
 ];
 
 /*{
@@ -170,6 +146,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function User() {
+  
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");

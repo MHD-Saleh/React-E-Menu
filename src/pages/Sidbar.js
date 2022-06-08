@@ -20,6 +20,7 @@ import QrCodeModal from "../componant/QRCodeModal";
 import sidebarConfigLoged from "../componant/SidbadConfigLoged";
 import sidebarConfigNotLoged from "../componant/sideBarConfigNot";
 import axios from "axios";
+import img from "../image/Emenu-logo.png";
 
 // ----------------------------------------------------------------------
 
@@ -98,19 +99,23 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       }}
     >
       <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
-        <h6>logo</h6>
+        <img src={img} style={{ width: "50px", height: "50px" }} alt="login" />
       </Box>
 
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
-            <Avatar src={"image path"} alt="photoURL" />
+            <Avatar src="M" alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                MHD Saleh
+                {localStorage.getItem("islogin") === "true"
+                  ? "MHD Saleh"
+                  : "Not Logged"}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                Admin
+                {localStorage.getItem("islogin") === "true"
+                  ? "Admin"
+                  : "Not Logged"}
               </Typography>
             </Box>
           </AccountStyle>

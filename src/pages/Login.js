@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import img from "../image/login.png";
 // material
 import { styled } from "@mui/material/styles";
 import { Card, Stack, Link, Container, Typography } from "@mui/material";
@@ -61,8 +62,8 @@ export default function Login() {
   return (
     <RootStyle title="Login To E-Menu">
       <SectionStyle sx={{ display: { xs: "none", md: "flex", padding: 20 } }}>
-        <Typography variant="h3"> Hi, Welcome Back</Typography>
-        <img src="/static/illustrations/illustration_login.png" alt="login" />
+        <Typography variant="h3"> Hi, Welcome Back!</Typography>
+        <img src={img} alt="login" />
       </SectionStyle>
 
       <Container maxWidth="sm">

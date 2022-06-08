@@ -43,7 +43,6 @@ const TABLE_HEAD = [
 ];
 
 const New_TABLE_HEAD = [
-  { id: "id", label: "id", alignRight: false },
   { id: "name", label: "name", alignRight: false },
   { id: "phone", label: "phone", alignRight: false },
   { id: "points", label: "points", alignRight: false },
@@ -55,43 +54,19 @@ const New_TABLE_HEAD = [
 const USERLIST = [
   {
     id: 1,
-    avatarUrl: "test",
     name: "saleh",
-    company: "saleh com",
-    salary: 1000,
-    isVerified: "true",
-    status: "active",
-    role: "Main admin",
+    phone: "0968426511",
+    points: 0,
+    created_at: "2022-05-29T12:01:38.000000Z",
+    updated_at: "2022-05-29T12:01:38.000000Z",
   },
   {
     id: 2,
-    avatarUrl: "test",
-    name: "ghaith",
-    company: "saleh com",
-    salary: 100,
-    isVerified: "no",
-    status: "banned",
-    role: "bitch",
-  },
-  {
-    id: 3,
-    avatarUrl: "test",
-    name: "yazan",
-    company: "saleh com",
-    salary: 75,
-    isVerified: "yes",
-    status: "active",
-    role: "bitch",
-  },
-  {
-    id: 4,
-    avatarUrl: "test",
-    name: "user",
-    company: "others com",
-    salary: 10000,
-    isVerified: "no",
-    status: "banned",
-    role: "vip",
+    name: "mhd",
+    phone: "0992278948",
+    points: 0,
+    created_at: "2022-06-05T17:23:28.000000Z",
+    updated_at: "2022-06-05T17:23:28.000000Z",
   },
 ];
 
@@ -311,12 +286,10 @@ export default function User() {
                       const {
                         id,
                         name,
-                        role,
-                        status,
-                        company,
-                        salary,
-                        avatarUrl,
-                        isVerified,
+                        phone,
+                        points,
+                        created_at,
+                        updated_at,
                       } = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -337,7 +310,7 @@ export default function User() {
                             >
                               <Avatar
                                 alt={name}
-                                src={avatarUrl}
+                                src={name}
                                 sx={{ margin: 2 }}
                               />
                               <Typography variant="subtitle2" noWrap>
@@ -345,22 +318,10 @@ export default function User() {
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{company}</TableCell>
-                          <TableCell align="left">{salary}</TableCell>
-                          <TableCell align="left">{role}</TableCell>
-                          <TableCell align="left">
-                            {isVerified ? "Yes" : "No"}
-                          </TableCell>
-                          <TableCell align="left">
-                            <Label
-                              variant="ghost"
-                              color={
-                                (status === "banned" && "error") || "success"
-                              }
-                            >
-                              {sentenceCase(status)}
-                            </Label>
-                          </TableCell>
+                          <TableCell align="left">{phone}</TableCell>
+                          <TableCell align="left">{points}</TableCell>
+                          <TableCell align="left">{created_at}</TableCell>
+                          <TableCell align="left">{updated_at}</TableCell>
 
                           <TableCell align="right">
                             <UserMoreMenu />
