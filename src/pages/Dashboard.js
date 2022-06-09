@@ -51,7 +51,7 @@ export default function DashboardLayout() {
 
   return (
     <RootStyle>
-      <DashboardSidebar isOpenSidebar={true} onCloseSidebar={() => false} />
+      <DashboardSidebar isOpenSidebar={false} onCloseSidebar={() => false} />
       <MainStyle>
         <Outlet />
       </MainStyle>

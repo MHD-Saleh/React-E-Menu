@@ -38,7 +38,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 //
 import Label from "../componant/Label";
-import { DashboardApiKey } from "../componant/Dashboard-Api";
+
 //import Isauthed from "../componant/ChickAuth";
 
 // ----------------------------------------------------------------------
@@ -163,6 +163,7 @@ export default function ProductList({ ...other }) {
   };
 
   const createPost = () => {
+    console.log("i am creating product");
     axios
       .post("http://localhost:8000/api/productStore", {
         name: state.ItemName,
@@ -202,7 +203,6 @@ export default function ProductList({ ...other }) {
 
   const deleteItem = (dd) => {
     axios.delete(`http://localhost:8000/api/productDelete/${dd}`).then(() => {
-      alert("Item Deleted!");
       GetMenu();
     });
   };

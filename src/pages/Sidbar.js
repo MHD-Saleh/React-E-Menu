@@ -109,12 +109,12 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
                 {localStorage.getItem("islogin") === "true"
-                  ? "MHD Saleh"
+                  ? localStorage.getItem("FirstName")
                   : "Not Logged"}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 {localStorage.getItem("islogin") === "true"
-                  ? "Admin"
+                  ? localStorage.getItem("RestName")
                   : "Not Logged"}
               </Typography>
             </Box>
@@ -147,21 +147,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   return (
     <RootStyle>
       <QrCodeModal show={QRCode} hide={hideQRModal} />
-      {!isDesktop && (
-        <Drawer
-          open={isOpenSidebar}
-          onClose={onCloseSidebar}
-          PaperProps={{
-            sx: { width: DRAWER_WIDTH },
-          }}
-        >
-          {renderContent}
-        </Drawer>
-      )}
 
       {isDesktop && (
         <Drawer
-          open
+          open={true}
           variant="persistent"
           PaperProps={{
             sx: {

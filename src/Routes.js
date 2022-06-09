@@ -38,10 +38,13 @@ export default function Router() {
         { path: "home", element: <Home /> },
         { path: "login", element: <Login /> },
         { path: "404", element: <Page404 /> },
-        { path: "welcome", element: <Welcome /> },
+
         { path: "*", element: <Navigate to="/404" /> },
       ],
     },
-    { path: "*", element: <Navigate to="/404" replace /> },
+    {
+      path: "/welcome",
+      element: <Welcome />,
+    },
   ]);
 }

@@ -5,8 +5,11 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Reports from "./Reports";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function LabTabs() {
+  const navigate = useNavigate();
   const CHART_DATA_1 = [
     {
       name: "Shawrmma",
@@ -47,6 +50,37 @@ export default function LabTabs() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const [Mdata, setMdata] = React.useState([]);
+
+  const name = [];
+  const price = [];
+
+  const GetMounthlyReports = async () => {
+    await axios
+      .get("http://localhost:8000/api/productView")
+      .then((res) => {
+        console.log("mounthly data is:", res.data);
+        setMdata(res.data);
+        for (const obj of res.data) {
+          name.push(obj.name);
+          price.push(obj.price);
+        }
+        console.log("name is:", name);
+        console.log("name is:", price);
+      })
+      .catch((err) => {
+        console.log("errrrrrrrrrrr", err.response.status);
+        if (err.response.status === 401) {
+          localStorage.removeItem("islogin");
+          console.log("found error");
+          navigate("/login");
+        }
+      });
+  };
+  React.useEffect(() => {
+    GetMounthlyReports();
+  }, []);
 
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
