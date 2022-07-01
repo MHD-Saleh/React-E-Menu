@@ -2,7 +2,11 @@ import React, { useEffect } from "react";
 import { Typography } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 
+import { useTranslation } from "react-i18next";
+
 function CheckoutSuccess() {
+  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
+
   const navigate = useNavigate();
   function _sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -15,17 +19,15 @@ function CheckoutSuccess() {
   }
 
   useEffect(() => {
+    document.title = "This is a title";
     _submitForm();
   }, []);
   return (
     <React.Fragment>
       <Typography variant="h5" gutterBottom>
-        Thank you for your using our App, you can Edit your data any Time
+        {i18n.t("thanks")}
       </Typography>
-      <Typography variant="subtitle1">
-        Your records will save for next time, and now we will navigating you to
-        Dashboard screen
-      </Typography>
+      <Typography variant="subtitle1">{i18n.t("more_info")}</Typography>
     </React.Fragment>
   );
 }

@@ -17,10 +17,11 @@ import useResponsive from "../componant/useresponsive";
 import Scrollbar from "../componant/Scrollbar";
 import NavSection from "../componant/NavSection";
 import QrCodeModal from "../componant/QRCodeModal";
-import sidebarConfigLoged from "../componant/SidbadConfigLoged";
-import sidebarConfigNotLoged from "../componant/sideBarConfigNot";
+
 import axios from "axios";
 import img from "../image/Emenu-logo.png";
+import { useTranslation } from "react-i18next";
+import Iconify from "../componant/Iconify";
 
 // ----------------------------------------------------------------------
 
@@ -48,7 +49,59 @@ DashboardSidebar.propTypes = {
   onCloseSidebar: PropTypes.func,
 };
 
+const getIcon = (name) => <Iconify icon={name} width={22} height={22} />;
+
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
+  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
+
+  const sidebarConfigNotLoged = [
+    //localStorage.setItem("islogin", "true");
+
+    {
+      title: i18n.t("Login"),
+      path: "/login",
+      icon: getIcon("eva:person-fill"),
+    },
+  ];
+
+  var sidebarConfigLoged = [
+    {
+      title: i18n.t("dashboard"),
+      path: "/dashboard/main",
+      icon: getIcon("eva:home-fill"),
+    },
+    {
+      title: i18n.t("user_List"),
+      path: "/dashboard/user",
+      icon: getIcon("eva:people-fill"),
+    },
+    {
+      title: i18n.t("Dishes"),
+      path: "/dashboard/dishes",
+      icon: getIcon("eva:shopping-bag-fill"),
+    },
+    {
+      title: i18n.t("Edit_Menu"),
+      path: "/dashboard/AddToMenu",
+      icon: getIcon("eva:flip-2-fill"),
+    },
+    {
+      title: i18n.t("Offers"),
+      path: "/dashboard/Offers",
+      icon: getIcon("eva:file-text-fill"),
+    },
+    {
+      title: i18n.t("Reports"),
+      path: "/dashboard/Reports",
+      icon: getIcon("eva:pie-chart-2-fill"),
+    },
+
+    {
+      title: i18n.t("Not_found"),
+      path: "/404",
+      icon: getIcon("eva:alert-triangle-fill"),
+    },
+  ];
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -110,12 +163,12 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
                 {localStorage.getItem("islogin") === "true"
                   ? localStorage.getItem("FirstName")
-                  : "Not Logged"}
+                  : i18n.t("Login")}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 {localStorage.getItem("islogin") === "true"
                   ? localStorage.getItem("RestName")
-                  : "Not Logged"}
+                  : i18n.t("Login")}
               </Typography>
             </Box>
           </AccountStyle>
@@ -130,12 +183,12 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         <Stack alignItems="center" spacing={1}>
           {loged === true ? (
             <Button onClick={showQRModal} variant="contained">
-              Show QR
+              {i18n.t("show_qr")}
             </Button>
           ) : null}
           {loged === true ? (
             <Button onClick={handelLogOut} variant="contained" color="error">
-              Logout
+              {i18n.t("logout")}
             </Button>
           ) : null}
         </Stack>

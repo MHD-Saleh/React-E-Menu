@@ -4,6 +4,7 @@ import { InputField, DatePickerField } from "../../FormFields";
 import { createTheme } from "@mui/material";
 
 import table from "../../../../image/table.png";
+import i18n from "../../../../i18n";
 
 const theme = createTheme({
   splitScreen: {
@@ -38,7 +39,7 @@ export default function PaymentForm(props) {
         {" "}
         <React.Fragment>
           <Typography variant="h6" gutterBottom>
-            Number of Table inside your Restaurant
+            {i18n.t("table_number")}
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>

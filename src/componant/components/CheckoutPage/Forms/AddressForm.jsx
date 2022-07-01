@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { InputField } from "../../FormFields";
 import table from "../../../../image/setting.png";
 import { createTheme } from "@mui/material";
+import i18n from "../../../../i18n";
 
 const theme = createTheme({
   splitScreen: {
@@ -22,6 +23,9 @@ const theme = createTheme({
 });
 
 export default function First(props) {
+  useEffect(() => {
+    document.title = "Setting";
+  }, []);
   const {
     formField: { firstName, lastName, RestaurantName },
   } = props;
@@ -36,7 +40,7 @@ export default function First(props) {
       <div style={theme.rightPane}>
         <React.Fragment>
           <Typography variant="h6" gutterBottom>
-            Restaurant info
+            {i18n.t("rest_info")}
           </Typography>
 
           <Grid container spacing={4}>

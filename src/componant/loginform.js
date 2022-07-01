@@ -19,13 +19,16 @@ import Iconify from "./Iconify";
 import axios from "../authConfig/axios";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 export default function LoginForm() {
+  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
   useEffect(() => {
+    document.title = "Login";
     const Chick = async () => {
       console.log("execude Chick Function");
       if ((await localStorage.getItem("islogin")) === "true") {
@@ -118,7 +121,7 @@ export default function LoginForm() {
               fullWidth
               autoComplete="username"
               type="email"
-              label="Email address"
+              label={i18n.t("email")}
               {...getFieldProps("email")}
               error={Boolean(touched.email && errors.email)}
               helperText={touched.email && errors.email}
@@ -128,7 +131,7 @@ export default function LoginForm() {
               fullWidth
               autoComplete="current-password"
               type={showPassword ? "text" : "password"}
-              label="Password"
+              label={i18n.t("pass")}
               {...getFieldProps("password")}
               InputProps={{
                 endAdornment: (
@@ -161,7 +164,7 @@ export default function LoginForm() {
                   checked={values.remember}
                 />
               }
-              label="Remember me"
+              label={i18n.t("Remember_me")}
             />
 
             <Link
@@ -171,12 +174,12 @@ export default function LoginForm() {
               to="#"
               underline="hover"
             >
-              Forgot password?
+              {i18n.t("forget_pass")}
             </Link>
           </Stack>
 
           <Button fullWidth size="large" type="submit" variant="contained">
-            Login
+            {i18n.t("Login")}
           </Button>
         </Form>
       </FormikProvider>

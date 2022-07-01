@@ -15,7 +15,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "./styles.css";
 
-import { Avatar, CardHeader } from "@mui/material";
+import { Avatar, CardActions, CardHeader } from "@mui/material";
 
 const MainDashboard = () => {
   const navigate = useNavigate();
@@ -32,6 +32,8 @@ const MainDashboard = () => {
       .get("http://localhost:8000/api/cartView")
       .then((res) => {
         console.log(res.data);
+        console.log("id is : ", res.data.id);
+        console.log("table num : ", res.data.table_number);
         setCart(res.data);
       })
       .catch((err) => {
@@ -67,41 +69,17 @@ const MainDashboard = () => {
         spaceBetween={20}
         slidesPerView={3}
       >
-        <SwiperSlide>
-          <CurrenOrder
-            amount="20,000"
-            state="{cart.status}"
-            name="table number 1"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <CurrenOrder
-            amount="30,000"
-            state="{cart.status}"
-            name="table number 2"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <CurrenOrder
-            amount="10,000"
-            state="{cart.status}"
-            name="table number 3"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <CurrenOrder
-            amount="7,000"
-            state="{cart.status}"
-            name="table number 4"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <CurrenOrder
-            amount="27,000"
-            state="{cart.status}"
-            name="table number 5"
-          />
-        </SwiperSlide>
+        {Cart.map((elem) => (
+          <SwiperSlide>
+            <CurrenOrder
+              amount={elem.amount}
+              state={elem.status}
+              table={elem.table_number}
+              id={elem.id}
+              time={elem.time}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );
@@ -110,6 +88,9 @@ const MainDashboard = () => {
 export default MainDashboard;
 
 const CurrenOrder = (probs) => {
+  const moreinfo = (id) => {
+    alert(JSON.stringify(id));
+  };
   return (
     <Card
       sx={{
@@ -121,7 +102,7 @@ const CurrenOrder = (probs) => {
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: "green" }} aria-label="recipe">
-            R
+            T
           </Avatar>
         }
         action={
@@ -129,21 +110,30 @@ const CurrenOrder = (probs) => {
             <DeleteIcon />
           </IconButton>
         }
-        title={probs.name}
-        subheader="5 Min ago"
+        title={probs.id}
+        subheader={"Time: " + probs.time}
       />
       <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Amount: {probs.amount}
+        <Typography sx={{ fontSize: 14 }} color="green" gutterBottom>
+          Price: {probs.amount}
         </Typography>
         <Typography variant="h5" component="div">
-          {probs.name}
+          Table No : {probs.table}
         </Typography>
-        <Button>more info</Button>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {probs.state}
-        </Typography>
+
         <Typography variant="body2">{probs.detiles}</Typography>
+        <CardActions sx={{ justifyContent: "center" }}>
+          {" "}
+          <Typography sx={{ mb: 1.5 }} color="red">
+            State:
+          </Typography>
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            {probs.state}
+          </Typography>
+        </CardActions>
+        <Button variant="contained" onClick={() => moreinfo(probs.id)}>
+          more info
+        </Button>
       </CardContent>
     </Card>
   );

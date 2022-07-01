@@ -8,10 +8,6 @@ export default function ReviewOrder() {
   const { values: formValues } = useFormikContext();
   return (
     <React.Fragment>
-      <Typography variant="h6" gutterBottom>
-        information summary
-      </Typography>
-
       <Grid container spacing={2}>
         <PaymentDetails formValues={formValues} />
       </Grid>

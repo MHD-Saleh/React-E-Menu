@@ -12,6 +12,7 @@ import { Card, Stack, Link, Container, Typography } from "@mui/material";
 import Page from "../componant/page";
 import LoginForm from "../componant/loginform";
 import { padding } from "@mui/system";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
@@ -47,6 +48,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 export default function Login() {
+  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
   const [open, setopen] = useState(false);
 
   const handelClick = () => {
@@ -62,7 +64,7 @@ export default function Login() {
   return (
     <RootStyle title="Login To E-Menu">
       <SectionStyle sx={{ display: { xs: "none", md: "flex", padding: 20 } }}>
-        <Typography variant="h3"> Hi, Welcome Back!</Typography>
+        <Typography variant="h3">{i18n.t("welcome")}</Typography>
         <img src={img} alt="login" />
       </SectionStyle>
 
@@ -70,10 +72,10 @@ export default function Login() {
         <ContentStyle>
           <Stack sx={{ mb: 5 }}>
             <Typography variant="h4" gutterBottom>
-              Login To E-Menu
+              {i18n.t("log_to_E")}
             </Typography>
             <Typography sx={{ color: "text.secondary" }}>
-              Enter your details below..
+              {i18n.t("detail")}
             </Typography>
           </Stack>
 

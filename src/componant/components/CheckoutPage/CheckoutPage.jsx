@@ -22,8 +22,10 @@ import formInitialValues from "./FormModel/formInitialValues";
 import validationSchema from "./FormModel/validationSchema";
 
 import useStyles from "./styles";
+import { useTranslation } from "react-i18next";
 
-const steps = ["Enter Resturant Name", "Payment details", "Review your order"];
+// additional ready will state if translations are loaded or not
+
 const { formId, formField } = checkoutFormModel;
 
 function _renderStepContent(step) {
@@ -40,6 +42,9 @@ function _renderStepContent(step) {
 }
 
 export default function CheckoutPage() {
+  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
+
+  const steps = [i18n.t("rest_name"), i18n.t("tabels_num"), i18n.t("review")];
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const currentValidationSchema = validationSchema[activeStep];
@@ -91,7 +96,7 @@ export default function CheckoutPage() {
               align="center"
               sx={{ p: 3 }}
             >
-              Setting Your page
+              {i18n.t("set_page")}
             </Typography>
             <Stepper activeStep={activeStep} sx={{ p: 3 }}>
               {steps.map((label) => (
@@ -119,7 +124,7 @@ export default function CheckoutPage() {
                             onClick={_handleBack}
                             className={classes.button}
                           >
-                            Back
+                            {i18n.t("back")}
                           </Button>
                         )}
                         <div className={classes.wrapper}>
@@ -130,7 +135,7 @@ export default function CheckoutPage() {
                             color="primary"
                             className={classes.button}
                           >
-                            {isLastStep ? "Submit" : "Next"}
+                            {isLastStep ? i18n.t("submit") : i18n.t("next")}
                           </Button>
                           {isSubmitting && (
                             <CircularProgress

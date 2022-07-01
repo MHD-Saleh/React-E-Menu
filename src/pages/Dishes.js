@@ -20,7 +20,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-// import DeleteIcon from '@mui/icons-material/Delete';
 import Iconify from "../componant/Iconify";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -29,6 +28,8 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 // component
 
@@ -408,7 +409,7 @@ export default function ProductList({ ...other }) {
                     variant="contained"
                     color="error"
                   >
-                    Delete
+                    {i18n.t("delete")}
                   </Button>
                 </Stack>
               </Stack>
