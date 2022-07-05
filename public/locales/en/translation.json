@@ -35,5 +35,10 @@
   "pass": "Password",
   "log_to_E": " Login To E-Menu",
   "detial": "Enter your details below.",
-  "welcome": " Hi, Welcome Back!"
+  "welcome": " Hi, Welcome Back!",
+  "price": "Price :",
+  "table_no": "Table No: ",
+  "state": "State :",
+  "time": "Time : ",
+  "more_inf": "More info"
 }

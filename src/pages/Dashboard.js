@@ -37,12 +37,7 @@ export default function DashboardLayout() {
   const navigate = useNavigate();
 
   const GetMenu = async () => {
-    await axios.get("http://localhost:8000/api/productView").catch((err) => {
-      if (err.response.status === 401) {
-        localStorage.removeItem("islogin");
-        navigate("/login");
-      }
-    });
+    await axios.get("http://localhost:8000/api/productView").catch((err) => {});
   };
 
   useEffect(() => {

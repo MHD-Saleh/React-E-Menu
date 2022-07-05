@@ -7,7 +7,6 @@ i18n
   .use(HttpApi)
   .init({
     fallbackLng: "ar",
-    debug: process.env.NODE_ENV === "development",
 
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default

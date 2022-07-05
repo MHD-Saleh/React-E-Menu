@@ -1,11 +1,14 @@
-import Axios from "axios";
+import axios from "axios";
 
-const axios = Axios.create({
-  baseURL: "http://localhost:8000",
-  headers: {
-    "X-Requested-With": "XMLHttpRequest",
-  },
-  withCredentials: true,
+const instance = axios.create({
+  baseURL: "http://e-menu-h.herokuapp.com/",
 });
 
-export default axios;
+instance.interceptors.request.use(function (config) {
+  const token = localStorage.getItem("mytoken");
+  console.log("MMMMMYYYY :" + token);
+  config.headers.Authorization = token ? `Bearer ${token}` : "";
+  return config;
+});
+
+export default instance;

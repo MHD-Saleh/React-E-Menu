@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "./authConfig/axios";
 
 const MyForm = () => {
   const handleSubmit = (e) => {

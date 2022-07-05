@@ -252,9 +252,6 @@ export default function User() {
       .catch((err) => {
         console.log("errrrrrrrrrrr", err.response.status);
         if (err.response.status === 401) {
-          localStorage.removeItem("islogin");
-          console.log("found error");
-          navigate("/login");
         }
       });
   };

@@ -16,10 +16,10 @@ import {
 //import { LoadingButton } from "@mui/lab";
 // component
 import Iconify from "./Iconify";
-import axios from "../authConfig/axios";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
 
 // ----------------------------------------------------------------------
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -29,13 +29,7 @@ export default function LoginForm() {
   const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
   useEffect(() => {
     document.title = "Login";
-    const Chick = async () => {
-      console.log("execude Chick Function");
-      if ((await localStorage.getItem("islogin")) === "true") {
-        console.log("navigate to dishes");
-        navigate("/dashboard/Dishes", { replace: true });
-      }
-    };
+    const Chick = async () => {};
 
     Chick();
   }, []);
@@ -53,21 +47,59 @@ export default function LoginForm() {
     setopen(false);
   };
 
-  const csrf = () => axios.get("/sanctum/csrf-cookie");
+  //const csrf = () => axios.get("/sanctum/csrf-cookie");
   const loginn = async (mail, pass) => {
-    await csrf();
-    console.log(csrf());
-
+    //await csrf();
+    //console.log(csrf());
+    var data = {
+      email: mail,
+      password: pass,
+      guard: "apiUser",
+    };
     axios
-      .post("/login", { email: mail, password: pass })
-      .then(() => {
+      .post("http://e-menu-h.herokuapp.com/login", data)
+      .then((res) => {
+        console.log(res);
+        console.log("res is : " + res.data["token:"]);
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${res.data["token:"]}`;
+        localStorage.setItem("mytoken", res.data["token:"]);
+        /* axios.defaults.headers.common = {
+          'Authorization': 'Bearer ' +  res.data["token:"]
+      };*/
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    const savedata = (data) => {};
+
+    //17|AOG0gBWM1Is0Xi1kry9JISMYs7fuVEKDgLnUcY6E
+
+    /* axios
+      .post(
+        "http://e-menu-h.herokuapp.com/login",
+        {
+          email: mail,
+          password: pass,
+          guard: "apiUser",
+        },
+        {
+          headers: {
+            Accept: "application/json",
+          },
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
         //navigate("/second");
-        localStorage.setItem("islogin", "true");
-        console.log("navigate to dishes");
+        //localStorage.setItem("islogin", "true");
+        console.log(res);
         // navigate("/dashboard/Dishes", { replace: true });
       })
       .then(() => {
-        navigate("/dashboard/Dishes", { replace: true });
+        // navigate("/dashboard/Dishes", { replace: true });
       })
       .catch((error) => {
         console.log(error);
@@ -79,7 +111,7 @@ export default function LoginForm() {
           handelClick();
           setmessage("Wrong Email or password");
         }
-      });
+      });*/
   };
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);

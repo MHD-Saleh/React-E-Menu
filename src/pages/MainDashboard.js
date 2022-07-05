@@ -15,7 +15,20 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "./styles.css";
 
-import { Avatar, CardActions, CardHeader } from "@mui/material";
+import moment from "moment";
+
+import {
+  Avatar,
+  CardActions,
+  CardHeader,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+} from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const MainDashboard = () => {
   const navigate = useNavigate();
@@ -51,8 +64,48 @@ const MainDashboard = () => {
     //console.log(Cart[0].id);
   }, []);
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const [id, setid] = React.useState();
+  const [Customer_id, setCustomer_id] = React.useState();
+  const [amount, setAmount] = React.useState();
+  const [Status, setStatus] = React.useState();
+  const [Createtime, setCreatetime] = React.useState();
+
+  const handelMoreInfo = (id) => {
+    setid(id);
+    setAmount(Cart[id - 1].amount);
+    setCustomer_id(Cart[id - 1].customer_id);
+    setStatus(Cart[id - 1].status);
+
+    const advance_date = moment(Cart[id - 1].created_at)
+      .utc()
+      .hour();
+
+    const total_time = moment(Cart[id - 1].created_at).format("h:mm");
+
+    const from_now = moment(Cart[id - 1].created_at)
+      .startOf("hour")
+      .fromNow();
+    //setCreatetime(advance_date.getTime);
+
+    console.log(from_now + " ago");
+
+    setCreatetime(total_time);
+
+    handleClickOpen();
+  };
+
+  const handleClose = async () => {
+    setOpen(false);
+  };
+
   return (
-    <div className="App">
+    <div>
       <Swiper
         autoplay={{
           delay: 2500,
@@ -77,10 +130,61 @@ const MainDashboard = () => {
               table={elem.table_number}
               id={elem.id}
               time={elem.time}
+              click={() => handelMoreInfo(elem.id)}
             />
           </SwiperSlide>
         ))}
       </Swiper>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Order Id {id}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            add the Details here and click save
+          </DialogContentText>
+          <Grid item container direction="column" xs={12} sm={6}>
+            <Typography variant="h6" gutterBottom>
+              Title
+            </Typography>
+            <Grid container maxWidth={1000}>
+              <React.Fragment>
+                <Grid item xs={6} maxWidth={1000}>
+                  <Typography gutterBottom color="green">
+                    amount:{" "}
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={6}
+                  container
+                  direction="column"
+                  alignItems="flex-end"
+                  justify="flex-start"
+                >
+                  <Typography gutterBottom color="red">
+                    {amount}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography gutterBottom color="green">
+                    Status :
+                  </Typography>
+                </Grid>
+                <Grid item xs={6} alignItems="flex-end" justify="flex-start">
+                  <Typography gutterBottom color="red">
+                    {Status}
+                  </Typography>
+                  <Typography gutterBottom color="red">
+                    {Createtime}
+                  </Typography>
+                </Grid>
+              </React.Fragment>
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
@@ -88,9 +192,8 @@ const MainDashboard = () => {
 export default MainDashboard;
 
 const CurrenOrder = (probs) => {
-  const moreinfo = (id) => {
-    alert(JSON.stringify(id));
-  };
+  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
+
   return (
     <Card
       sx={{
@@ -111,30 +214,106 @@ const CurrenOrder = (probs) => {
           </IconButton>
         }
         title={probs.id}
-        subheader={"Time: " + probs.time}
+        subheader={i18n.t("time") + probs.time}
       />
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="green" gutterBottom>
-          Price: {probs.amount}
+          {i18n.t("price")} {probs.amount}
         </Typography>
         <Typography variant="h5" component="div">
-          Table No : {probs.table}
+          {i18n.t("table_no")} {probs.table}
         </Typography>
 
         <Typography variant="body2">{probs.detiles}</Typography>
         <CardActions sx={{ justifyContent: "center" }}>
           {" "}
           <Typography sx={{ mb: 1.5 }} color="red">
-            State:
+            {i18n.t("state")}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {probs.state}
           </Typography>
         </CardActions>
-        <Button variant="contained" onClick={() => moreinfo(probs.id)}>
-          more info
+        <Button variant="contained" onClick={probs.click}>
+          {i18n.t("more_inf")}
         </Button>
       </CardContent>
     </Card>
   );
 };
+
+/*
+
+
+<Grid item container direction="column" xs={12} sm={6}>
+      <Typography variant="h6" gutterBottom className={classes.title}>
+        {i18n.t("summary")}
+      </Typography>
+      <Grid container>
+        <React.Fragment>
+          <Grid item xs={6}>
+            <Typography gutterBottom>{i18n.t("Fname")}:</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography gutterBottom>{firstName}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography gutterBottom>{i18n.t("Lname")}:</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography gutterBottom>{lastName}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography gutterBottom>{i18n.t("Rname")}:</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography gutterBottom>{RestaurantName}</Typography>
+          </Grid>
+        </React.Fragment>
+      </Grid>
+    </Grid>
+*/
+
+/*
+
+     <Typography
+            sx={{ fontSize: 14 }}
+            style={{
+              float: "left",
+            }}
+            color="green"
+            gutterBottom
+          >
+            Amount :
+          </Typography>
+          <Typography
+            sx={{ fontSize: 14 }}
+            style={{
+              float: "right",
+            }}
+            color="red"
+            gutterBottom
+          >
+            {amount}
+          </Typography>
+          <Typography
+            sx={{ fontSize: 14 }}
+            style={{
+              float: "left",
+            }}
+            color="green"
+            gutterBottom
+          >
+            Status :
+          </Typography>
+          <Typography
+            sx={{ fontSize: 14 }}
+            style={{
+              float: "right",
+            }}
+            color="red"
+            gutterBottom
+          >
+            {Status}
+          </Typography>
+          */

@@ -1,6 +1,6 @@
 import { Navigate, useRoutes } from "react-router-dom";
 import DashboardLayout from "./pages/Dashboard";
-import First from "./first";
+
 import ProductList from "./pages/Dishes";
 import Page404 from "./pages/Error";
 import Login from "./pages/Login";
@@ -21,7 +21,7 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { path: "main", element: <MainDashboard /> },
-        { path: "first", element: <First /> },
+
         { path: "Dishes", element: <ProductList /> },
         { path: "offers", element: <Offers /> },
         { path: "AddToMenu", element: <Add2Menu /> }, //LabTabs

@@ -39,6 +39,8 @@ import i18n from "../i18n";
 
 //
 import Label from "../componant/Label";
+import { AspectRatio } from "@mui/icons-material";
+import instance from "../authConfig/axios";
 
 //import Isauthed from "../componant/ChickAuth";
 
@@ -147,24 +149,64 @@ export default function ProductList({ ...other }) {
 
   const TypeCatogory = async () => {
     //http://127.0.0.1:8000/api/typeView
-    await axios
+
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: "api/typeView",
+        method: "GET",
+      }).then((res) => {
+        // handle success
+        console.log("Type Date : ", res.data);
+        settype_Id(res.data);
+      });
+    } catch (e) {
+      // handle error
+      console.error(e);
+      console.log("error with get from heroku", e.response);
+      console.log("but my token is : " + localStorage.getItem("mytoken"));
+    }
+    /*await axios
       .get("http://localhost:8000/api/typeView")
       .then((res) => {
         console.log("Type Date", res.data);
         settype_Id(res.data);
       })
       .catch((err) => {
-        console.log("errrrrrrrrrrr", err.response.status);
-        if (err.response.status === 401) {
-          localStorage.removeItem("islogin");
-          console.log("found error");
-          navigate("/login");
-        }
-      });
+        console.log("err with get type", err.response.status);
+      });*/
   };
 
-  const createPost = () => {
-    console.log("i am creating product");
+  const createPost = async () => {
+    console.log("i'm creating product");
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: "api/productStore",
+        method: "POST",
+        data: {
+          name: state.ItemName,
+          type_id: CrtType,
+          time: 5,
+          price: state.Price,
+          image: state.Img,
+          priceSale: state.PriceSale,
+          status: checked === true ? "sale" : "",
+          details: state.desc,
+        },
+      }).then((res) => {
+        // handle success
+        console.log("created");
+
+        GetMenu();
+      });
+    } catch (e) {
+      // handle error
+      console.error(e);
+      console.log("error with create from heroku", e.response);
+      console.log("but my token is : " + localStorage.getItem("mytoken"));
+    }
+
     axios
       .post("http://localhost:8000/api/productStore", {
         name: state.ItemName,
@@ -202,40 +244,61 @@ export default function ProductList({ ...other }) {
       });
   };
 
-  const deleteItem = (dd) => {
-    axios.delete(`http://localhost:8000/api/productDelete/${dd}`).then(() => {
-      GetMenu();
-    });
+  const deleteItem = async (dd) => {
+    //api/productDelete
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: `api/productDelete/${dd}`,
+        method: "DELETE",
+      }).then((res) => {
+        // handle success
+        console.log("deleted");
+
+        GetMenu();
+      });
+    } catch (e) {
+      // handle error
+      console.error(e);
+      console.log("error with delete from heroku", e.response);
+      console.log("but my token is : " + localStorage.getItem("mytoken"));
+    }
   };
 
   const GetMenu = async () => {
-    await axios
-      .get("http://localhost:8000/api/productView")
+    /* await axios
+      .get("http://e-menu-h.herokuapp.com/api/productView", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         setdishs(res.data);
       })
       .catch((err) => {
-        console.log("errrrrrrrrrrr", err.response.status);
-        if (err.response.status === 401) {
-          localStorage.removeItem("islogin");
-          console.log("found error");
-          navigate("/login");
-        }
+        console.log("error with get from heroku", err.response);
+        console.log("but my token is : " + localStorage.getItem("mytoken"));
+      });*/
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: "api/productView",
+        method: "GET",
+      }).then((res) => {
+        // handle success
+        console.log(res.data);
+        setdishs(res.data);
       });
-    /* axios
-      .get("http://localhost:3004/Menu")
-      .then((res) => {
-        console.log(res.data);
-        setdishs(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        });*/
+    } catch (e) {
+      // handle error
+      console.error(e);
+      console.log("error with get from heroku", e.response);
+      console.log("but my token is : " + localStorage.getItem("mytoken"));
+    }
   };
 
   useEffect(() => {
-    console.log("updatinggggggg useEffect");
     GetMenu();
 
     TypeCatogory();

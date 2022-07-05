@@ -106,18 +106,26 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
 
   const isDesktop = useResponsive("up", "lg");
-  //
-
-  const logout = () => {
-    //cookies.remove('laravelsession');
-    //window.location.href='/';
-  };
 
   const handelLogOut = async () => {
-    await axios.post("http://localhost:8000/logout").then((respons) => {
-      localStorage.removeItem("islogin");
-      navigate("/login");
-    });
+    const config = {
+      headers: {
+        Authorization: `Bearer 17|AOG0gBWM1Is0Xi1kry9JISMYs7fuVEKDgLnUcY6E`,
+      },
+    };
+
+    const bodyParameters = {
+      key: "value",
+    };
+
+    axios
+      .post("http://e-menu-h.herokuapp.com/logout", bodyParameters, config)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const [QRCode, setQRCode] = useState(false);
