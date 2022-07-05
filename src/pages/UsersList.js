@@ -26,6 +26,8 @@ import Iconify from "../componant/Iconify";
 import SearchNotFound from "../componant/SearchNotFound";
 import { UserListHead, UserListToolbar, UserMoreMenu } from "../componant/user";
 import axios from "axios";
+import instance from "../authConfig/axios";
+import moment from "moment";
 //
 
 //import USERLIST from "../componant/UserTest";
@@ -62,36 +64,6 @@ const USERLIST = [
     isVerified: "true",
     status: "active",
     role: "Main admin",
-  },
-  {
-    id: 2,
-    avatarUrl: "test",
-    name: "ghaith",
-    company: "saleh com",
-    salary: 100,
-    isVerified: "no",
-    status: "banned",
-    role: "bitch",
-  },
-  {
-    id: 3,
-    avatarUrl: "test",
-    name: "yazan",
-    company: "saleh com",
-    salary: 75,
-    isVerified: "yes",
-    status: "active",
-    role: "bitch",
-  },
-  {
-    id: 4,
-    avatarUrl: "test",
-    name: "user",
-    company: "others com",
-    salary: 10000,
-    isVerified: "no",
-    status: "banned",
-    role: "vip",
   },
 ];
 
@@ -170,6 +142,18 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function User() {
+  const [data, setdata] = useState([
+    {
+      id: 1,
+      avatarUrl: "test",
+      name: "saleh",
+      company: "saleh com",
+      salary: 1000,
+      isVerified: "true",
+      status: "active",
+      role: "Main admin",
+    },
+  ]);
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -186,7 +170,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = data.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -225,35 +209,35 @@ export default function User() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
   const filteredUsers = applySortFilter(
-    USERLIST,
+    data,
     getComparator(order, orderBy),
     filterName
   );
 
   const isUserNotFound = filteredUsers.length === 0;
 
-  const [data, setdata] = useState([]);
   //api/customerView
   const getuser = async () => {
-    await axios
-      .get("http://localhost:8000/api/customerView")
-      .then((res) => {
-        console.log("incoming data", res.data);
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: "api/customerView",
+        method: "GET",
+      }).then((res) => {
+        // handle success
+        console.log(res.data);
         setdata(res.data);
-        //USERLIST = res.data;
-        // for (const obj of res.data) {
-        //USERLIST.push(obj);
-        //}
-        console.log("userlist data", USERLIST);
-      })
-      .catch((err) => {
-        console.log("errrrrrrrrrrr", err.response.status);
-        if (err.response.status === 401) {
-        }
+        console.log("userlist data", data);
       });
+    } catch (e) {
+      // handle error
+      console.error(e);
+      // handelClick();
+      // setmessage("error with get product List");
+    }
   };
   useEffect(() => {
     console.log("updatinggggggg useEffect");
@@ -296,7 +280,7 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={New_TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={data.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -308,12 +292,10 @@ export default function User() {
                       const {
                         id,
                         name,
-                        role,
-                        status,
-                        company,
-                        salary,
-                        avatarUrl,
-                        isVerified,
+                        phone,
+                        points,
+                        created_at,
+                        updated_at,
                       } = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -326,6 +308,7 @@ export default function User() {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
+                          <TableCell align="left">{id}</TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack
                               direction="row"
@@ -334,7 +317,7 @@ export default function User() {
                             >
                               <Avatar
                                 alt={name}
-                                src={avatarUrl}
+                                src={"test"}
                                 sx={{ margin: 2 }}
                               />
                               <Typography variant="subtitle2" noWrap>
@@ -342,21 +325,13 @@ export default function User() {
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{company}</TableCell>
-                          <TableCell align="left">{salary}</TableCell>
-                          <TableCell align="left">{role}</TableCell>
+                          <TableCell align="left">{phone}</TableCell>
+                          <TableCell align="left">{points}</TableCell>
                           <TableCell align="left">
-                            {isVerified ? "Yes" : "No"}
+                            {moment(created_at).format("YYYY/MM/DD")}
                           </TableCell>
                           <TableCell align="left">
-                            <Label
-                              variant="ghost"
-                              color={
-                                (status === "banned" && "error") || "success"
-                              }
-                            >
-                              {sentenceCase(status)}
-                            </Label>
+                            {moment(updated_at, "YYYYMMDD").fromNow()}
                           </TableCell>
 
                           <TableCell align="right">
@@ -387,7 +362,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={data.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

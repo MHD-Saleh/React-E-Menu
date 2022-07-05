@@ -22,6 +22,7 @@ import axios from "axios";
 import img from "../image/Emenu-logo.png";
 import { useTranslation } from "react-i18next";
 import Iconify from "../componant/Iconify";
+import instance from "../authConfig/axios";
 
 // ----------------------------------------------------------------------
 
@@ -108,24 +109,23 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const isDesktop = useResponsive("up", "lg");
 
   const handelLogOut = async () => {
-    const config = {
-      headers: {
-        Authorization: `Bearer 17|AOG0gBWM1Is0Xi1kry9JISMYs7fuVEKDgLnUcY6E`,
-      },
-    };
-
-    const bodyParameters = {
-      key: "value",
-    };
-
-    axios
-      .post("http://e-menu-h.herokuapp.com/logout", bodyParameters, config)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: "/logout",
+        method: "POST",
+      }).then((res) => {
+        // handle success
+        console.log(res.data);
+        localStorage.removeItem("mytoken");
+        navigate("/login");
       });
+    } catch (e) {
+      // handle error
+      console.error(e);
+      console.log("error with get from heroku", e.response);
+      console.log("but my token is : " + localStorage.getItem("mytoken"));
+    }
   };
 
   const [QRCode, setQRCode] = useState(false);
@@ -137,7 +137,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const [loged, setloged] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("islogin")) {
+    if (localStorage.getItem("mytoken")) {
       setloged(true);
     } else {
       setloged(false);
@@ -169,12 +169,12 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             <Avatar src="M" alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                {localStorage.getItem("islogin") === "true"
+                {localStorage.getItem("mytoken")
                   ? localStorage.getItem("FirstName")
                   : i18n.t("Login")}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {localStorage.getItem("islogin") === "true"
+                {localStorage.getItem("mytoken")
                   ? localStorage.getItem("RestName")
                   : i18n.t("Login")}
               </Typography>
@@ -209,21 +209,19 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     <RootStyle>
       <QrCodeModal show={QRCode} hide={hideQRModal} />
 
-      {isDesktop && (
-        <Drawer
-          open={true}
-          variant="persistent"
-          PaperProps={{
-            sx: {
-              width: DRAWER_WIDTH,
-              bgcolor: "background.default",
-              borderRightStyle: "dashed",
-            },
-          }}
-        >
-          {renderContent}
-        </Drawer>
-      )}
+      <Drawer
+        open={true}
+        variant="persistent"
+        PaperProps={{
+          sx: {
+            width: DRAWER_WIDTH,
+            bgcolor: "background.default",
+            borderRightStyle: "dashed",
+          },
+        }}
+      >
+        {renderContent}
+      </Drawer>
     </RootStyle>
   );
 }

@@ -100,6 +100,7 @@ export default function ProductList({ ...other }) {
   };
 
   const [openAlert, setopenAlert] = useState(false);
+  const [message, setmessage] = useState("error");
 
   const handelClick = () => {
     setopenAlert(true);
@@ -203,29 +204,41 @@ export default function ProductList({ ...other }) {
     } catch (e) {
       // handle error
       console.error(e);
-      console.log("error with create from heroku", e.response);
-      console.log("but my token is : " + localStorage.getItem("mytoken"));
+      handelClick();
+      setmessage("error with add Product");
     }
   };
 
   const updateItem = async (dd) => {
     console.log("trying update");
 
-    await axios
-      .post(`https://localhost:8000/api/productEdit/${dd}`, {
-        name: EName,
-        type_id: 1,
-        time: 5,
-        price: Eprice,
-        priceSale: EPriceSale,
-        status: EStatus === true ? "sale" : "",
-        details: Edesc,
-        image: EImg,
-      })
-      .then((response) => {
-        console.log(response.data);
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: `api/productEdit${dd}`,
+        method: "POST",
+        data: {
+          name: state.ItemName,
+          type_id: CrtType,
+          time: 5,
+          price: state.Price,
+          image: state.Img,
+          priceSale: state.PriceSale,
+          status: checked === true ? "sale" : "",
+          details: state.desc,
+        },
+      }).then((res) => {
+        // handle success
+        console.log("created");
+
         GetMenu();
       });
+    } catch (e) {
+      // handle error
+      console.error(e);
+      handelClick();
+      setmessage("error with updateing");
+    }
   };
 
   const deleteItem = async (dd) => {
@@ -244,26 +257,12 @@ export default function ProductList({ ...other }) {
     } catch (e) {
       // handle error
       console.error(e);
-      console.log("error with delete from heroku", e.response);
-      console.log("but my token is : " + localStorage.getItem("mytoken"));
+      handelClick();
+      setmessage("error with Delete item");
     }
   };
 
   const GetMenu = async () => {
-    /* await axios
-      .get("http://e-menu-h.herokuapp.com/api/productView", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setdishs(res.data);
-      })
-      .catch((err) => {
-        console.log("error with get from heroku", err.response);
-        console.log("but my token is : " + localStorage.getItem("mytoken"));
-      });*/
     try {
       await instance({
         // url of the api endpoint (can be changed)
@@ -277,8 +276,8 @@ export default function ProductList({ ...other }) {
     } catch (e) {
       // handle error
       console.error(e);
-      console.log("error with get from heroku", e.response);
-      console.log("but my token is : " + localStorage.getItem("mytoken"));
+      handelClick();
+      setmessage("error with get product List");
     }
   };
 
@@ -360,8 +359,8 @@ export default function ProductList({ ...other }) {
         autoHideDuration={3000}
         //message="test Snack"
       >
-        <Alert onClose={handelClose} severity="warning">
-          please Fill all Input
+        <Alert onClose={handelClose} severity="error">
+          {message}
         </Alert>
       </Snackbar>
       <Grid container spacing={3}>
@@ -578,6 +577,8 @@ export default function ProductList({ ...other }) {
                 state.desc === ""
               ) {
                 handleClose();
+                handelClick();
+                setmessage("error with adding product");
               } else {
                 createPost();
 
