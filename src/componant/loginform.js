@@ -57,7 +57,7 @@ export default function LoginForm() {
       guard: "apiUser",
     };
     axios
-      .post("http://e-menu-h.herokuapp.com/login", data)
+      .post("https://e-menu-h.herokuapp.com/login", data)
       .then((res) => {
         console.log(res);
         console.log("res is : " + res.data["token:"]);
@@ -65,17 +65,13 @@ export default function LoginForm() {
           "Authorization"
         ] = `Bearer ${res.data["token:"]}`;
         localStorage.setItem("mytoken", res.data["token:"]);
-        /* axios.defaults.headers.common = {
-          'Authorization': 'Bearer ' +  res.data["token:"]
-      };*/
+        navigate("/dashboard/Dishes", { replace: true });
       })
       .catch((err) => {
         console.log(err);
+        handelClick();
+        setmessage("Wrong Email or password");
       });
-
-    const savedata = (data) => {};
-
-    //17|AOG0gBWM1Is0Xi1kry9JISMYs7fuVEKDgLnUcY6E
 
     /* axios
       .post(

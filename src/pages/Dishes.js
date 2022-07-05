@@ -206,29 +206,13 @@ export default function ProductList({ ...other }) {
       console.log("error with create from heroku", e.response);
       console.log("but my token is : " + localStorage.getItem("mytoken"));
     }
-
-    axios
-      .post("http://localhost:8000/api/productStore", {
-        name: state.ItemName,
-        type_id: CrtType,
-        time: 5,
-        price: state.Price,
-        image: state.Img,
-        priceSale: state.PriceSale,
-        status: checked === true ? "sale" : "",
-        details: state.desc,
-      })
-      .then((response) => {
-        console.log(response.data);
-        GetMenu();
-      });
   };
 
   const updateItem = async (dd) => {
     console.log("trying update");
 
     await axios
-      .post(`http://localhost:8000/api/productEdit/${dd}`, {
+      .post(`https://localhost:8000/api/productEdit/${dd}`, {
         name: EName,
         type_id: 1,
         time: 5,

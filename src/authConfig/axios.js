@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://e-menu-h.herokuapp.com/",
+  baseURL: "https://e-menu-h.herokuapp.com/",
 });
 
 instance.interceptors.request.use(function (config) {
