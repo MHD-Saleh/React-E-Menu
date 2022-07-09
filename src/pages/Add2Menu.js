@@ -15,33 +15,7 @@ import {
 import { red } from "@mui/material/colors";
 import SB from "../componant/SB";
 import { useNavigate } from "react-router-dom";
-
-//  console.log("windows location", window.location.origin);
-
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: 66 },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-];
-
-const rowsAfter = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: 66 },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-];
-const newRow = [];
+import instance from "../authConfig/axios";
 
 const theme = createTheme({
   splitScreen: {
@@ -78,9 +52,6 @@ const Add2Menu = () => {
         };
 
         return (
-          /* <IconButton aria-label="delete">
-      <DeleteIcon color="error" />
-    </IconButton>*/
           <Button
             size="small"
             variant="contained"
@@ -145,14 +116,12 @@ const Add2Menu = () => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
 
-          console.log(params.id);
-          DeleteMainMenu(params.id);
+          console.log("this is params   " + params);
+
+          getid(params.id);
         };
 
         return (
-          /* <IconButton aria-label="delete">
-      <DeleteIcon color="error" />
-    </IconButton>*/
           <Button
             size="small"
             variant="contained"
@@ -171,6 +140,7 @@ const Add2Menu = () => {
       width: 60,
       headerClassName: "super-app-theme--header",
     },
+
     {
       headerAlign: "center",
       field: "name",
@@ -227,123 +197,133 @@ const Add2Menu = () => {
     setopenError(false);
   };
 
-  //http://127.0.0.1:8000/api/outOfMenu
-  const [prod_id, setprod_id] = useState();
+  const getid = (id) => {
+    var areAllNotNull = Menu.map((item) => {
+      if (item.id === id) {
+        return item.menu[0].id;
+      }
+    });
+    const elem = areAllNotNull.map((el) => {
+      if (el !== undefined) {
+        console.log("elemnt is : " + el);
+        DeleteMainMenu(el);
+      }
+    });
 
-  const store2menu = () => {
-    axios
-      .post("http://localhost:8000/api/outOfMenu", {
-        product_id: prod_id,
-      })
-      .then((response) => {
-        console.log(response.data);
-      });
+    console.log("the id ypu want : ", areAllNotNull);
   };
 
   //http://127.0.0.1:8000/api/outOfMenu
 
-  const [before, setbefore] = useState([]);
+  const [outOfMenu, setoutOfMenu] = useState([]);
 
   const GetBefore = async () => {
-    await axios
-      .get("http://localhost:8000/api/outOfMenu")
-      .then((res) => {
-        console.log(res.data);
-        setbefore(res.data);
-      })
-      .catch((err) => {
-        console.log("errrrrrrrrrrr", err.response.status);
+    //api/outOfMenu
+
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: "api/outOfMenu",
+        method: "GET",
+      }).then((res) => {
+        // handle success
+
+        setoutOfMenu(res.data);
       });
+    } catch (e) {
+      // handle error
+      console.error(e);
+      //handelClick();
+      //setmessage("error with get outofmenu List");
+    }
   };
 
-  //http://127.0.0.1:8000/api/Menu
-
-  /*const detailsRows = after.map((row) => {
-    return {
-      id: row.id,
-    };
-  });*/
-
-  const [tableData, setTableData] = useState([]);
-
-  const testget = async () => {
-    await axios
-      .get("http://localhost:8000/api/Menu")
-      .then((data) => data.json())
-      .then((data) => setTableData(data))
-      .catch((err) => {
-        console.log("errror ", err.response.status);
-      });
-  };
-
-  const [sa, setsa] = useState([]);
+  //api/Menu
+  const [Menu, setMenu] = useState([]);
 
   const GetAfter = async () => {
-    await axios
-      .get("http://localhost:8000/api/Menu")
-      .then((res) => {
-        console.log("After Data", res.data);
-        setsa(res.data);
-        console.log("menu", res.data[0].menu[0].id);
-      })
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: "api/Menu",
+        method: "GET",
+      }).then((res) => {
+        // handle success
 
-      .catch((err) => {
-        console.log("errror from get after with code", err.response.status);
-        if (err.response.status === 401) {
-          localStorage.removeItem("islogin");
-          console.log("found error");
-          navigate("/login");
-        }
+        setMenu(res.data);
       });
+    } catch (e) {
+      // handle error
+      console.error(e);
+      //handelClick();
+      //setmessage("error with get outofmenu List");
+    }
   };
 
   //Store To Actual Menu
   //http://127.0.0.1:8000/api/menuStore
   const AddMainMenu = async (id) => {
-    await axios
-      .post("http://localhost:8000/api/menuStore", {
-        product_id: id,
-      })
-      .then((response) => {
-        console.log("post to menu log: ", response.data);
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: "api/menuStore",
+        method: "POST",
+        data: {
+          product_id: id,
+        },
+      }).then((res) => {
+        // handle success
+        console.log("created");
         GetAfter();
         GetBefore();
-        handelClickSuccess();
-      })
-      .catch((error) => {
-        console.log("error with posting add to menu", error);
-        handelClickError();
       });
+    } catch (e) {
+      // handle error
+      console.error(e);
+    }
   };
 
   //delete from Actual Menu
   //http://127.0.0.1:8000/api/menuDelete/2
   const DeleteMainMenu = async (id) => {
-    await axios
-      .delete(`http://localhost:8000/api/menuDelete/${id}`)
-      .then((response) => {
-        console.log("post to menu log: ", response.data);
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: `api/menuDelete/${id}`,
+        method: "DELETE",
+      }).then((res) => {
+        // handle success
+        console.log("deleted with id " + id);
         GetAfter();
         GetBefore();
-      })
-      .catch((error) => {
-        handelClickError();
-        console.log("error with posting add to menu", error);
       });
+    } catch (e) {
+      // handle error
+      console.error(e);
+      //handelClick();
+      //setmessage("error with Delete item");
+    }
   };
 
   useEffect(() => {
     console.log("load Add2Menu page");
     GetAfter();
-    testget();
+
     GetBefore();
   }, []);
 
   return (
     <div>
       <Typography
-        sx={{ mb: "10px", fontFamily: "Monospace", color: "#43a047" }}
         variant="h3"
+        sx={{
+          paddingLeft: "20px",
+          width: 320,
+          height: 50,
+          backgroundColor: "primary.main",
+          color: "white",
+          borderRadius: "10px",
+        }}
       >
         Add to Menu Page
       </Typography>
@@ -358,7 +338,7 @@ const Add2Menu = () => {
           </Typography>
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={sa}
+              rows={Menu}
               columns={columns}
               pageSize={5}
               rowsPerPageOptions={[5]}
@@ -389,7 +369,7 @@ const Add2Menu = () => {
             Items From Products
           </Typography>
           <DataGrid
-            rows={before}
+            rows={outOfMenu}
             columns={columns2}
             pageSize={5}
             rowsPerPageOptions={[5]}
@@ -426,24 +406,3 @@ const Add2Menu = () => {
 };
 
 export default Add2Menu;
-
-/*  <Grid container alignItems="stretch" spacing={3}>
-        <Grid className="left-pane" item>
-          <h1>Test 1</h1>
-          <Button variant="contained" color="error">
-            test
-          </Button>
-          <h1>Test 1</h1>
-          <h1>Test 1</h1>
-          <h1>Test 1</h1>
-        </Grid>
-        <Grid className="right-pane" item>
-          <h1>Test</h1>
-          <Button variant="contained" color="primary">
-            hello
-          </Button>
-          <h1>Test</h1>
-          <h1>Test</h1>
-          <h1>Test</h1>
-        </Grid>
-      </Grid>*/

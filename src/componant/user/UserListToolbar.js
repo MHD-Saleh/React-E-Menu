@@ -10,10 +10,12 @@ import {
   OutlinedInput,
   InputAdornment,
   Button,
+  Chip,
 } from "@mui/material";
 // component
 
 import Iconify from "../Iconify";
+import PersonIcon from "@mui/icons-material/Person";
 
 // ----------------------------------------------------------------------
 
@@ -45,11 +47,7 @@ UserListToolbar.propTypes = {
   onFilterName: PropTypes.func,
 };
 
-export default function UserListToolbar({
-  numSelected,
-  filterName,
-  onFilterName,
-}) {
+export default function UserListToolbar({ numbers, filterName, onFilterName }) {
   return (
     <RootStyle>
       <SearchStyle
@@ -62,7 +60,12 @@ export default function UserListToolbar({
           </InputAdornment>
         }
       />
-      <Button>click me</Button>
+      <Chip
+        icon={<PersonIcon />}
+        label={`${numbers} users`}
+        color="success"
+        variant="outlined"
+      />
     </RootStyle>
   );
 }

@@ -54,59 +54,6 @@ const New_TABLE_HEAD = [
   { id: "" },
 ];
 
-const USERLIST = [
-  {
-    id: 1,
-    avatarUrl: "test",
-    name: "saleh",
-    company: "saleh com",
-    salary: 1000,
-    isVerified: "true",
-    status: "active",
-    role: "Main admin",
-  },
-];
-
-/*{
-    id: 1,
-    avatarUrl: "test",
-    name: "saleh",
-    company: "saleh com",
-    salary: 1000,
-    isVerified: "true",
-    status: "active",
-    role: "Main admin",
-  },
-  {
-    id: 2,
-    avatarUrl: "test",
-    name: "ghaith",
-    company: "saleh com",
-    salary: 100,
-    isVerified: "no",
-    status: "banned",
-    role: "bitch",
-  },
-  {
-    id: 3,
-    avatarUrl: "test",
-    name: "yazan",
-    company: "saleh com",
-    salary: 75,
-    isVerified: "yes",
-    status: "active",
-    role: "bitch",
-  },
-  {
-    id: 4,
-    avatarUrl: "test",
-    name: "user",
-    company: "others com",
-    salary: 10000,
-    isVerified: "no",
-    status: "banned",
-    role: "vip",
-  }, */
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
@@ -177,24 +124,6 @@ export default function User() {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-    setSelected(newSelected);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -253,22 +182,24 @@ export default function User() {
           justifyContent="space-between"
           mb={5}
         >
-          <Typography variant="h4" gutterBottom>
+          <Typography
+            variant="h3"
+            sx={{
+              paddingLeft: "20px",
+              width: 260,
+              height: 50,
+              backgroundColor: "primary.main",
+              color: "white",
+              borderRadius: "10px",
+            }}
+          >
             Customer List
           </Typography>
-          <Button
-            variant="contained"
-            component={RouterLink}
-            to="#"
-            startIcon={<Iconify icon="eva:plus-fill" />}
-          >
-            New Userrrr
-          </Button>
         </Stack>
 
         <Card>
           <UserListToolbar
-            numSelected={selected.length}
+            numbers={data.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
@@ -341,7 +272,7 @@ export default function User() {
                       );
                     })}
                   {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableRow style={{ height: 10 * emptyRows }}>
                       <TableCell colSpan={6} />
                     </TableRow>
                   )}
