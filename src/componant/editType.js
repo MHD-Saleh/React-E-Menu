@@ -193,7 +193,7 @@ const EditType = () => {
       }).then((res) => {
         // handle success
         console.log(res.data);
-        console.log("image : " + res.data[0].product[0].image);
+
         setTypes(res.data);
         setisloading(false);
       });
@@ -255,7 +255,12 @@ const EditType = () => {
               <Grid key={type.id} item xs={12} sm={6} md={3}>
                 <Card style={secondery}>
                   <Box sx={{ pt: "100%", position: "relative" }}>
-                    <ProductImgStyle alt={type.name} src={"image"} />
+                    <ProductImgStyle
+                      alt={type.name}
+                      src={
+                        "https://as2.ftcdn.net/v2/jpg/02/17/65/41/1000_F_217654108_nykFEn3Yk2sMfcJn4PNoacBfSYxzlCEO.jpg"
+                      }
+                    />
                   </Box>
 
                   <Stack spacing={2} sx={{ p: 3 }}>

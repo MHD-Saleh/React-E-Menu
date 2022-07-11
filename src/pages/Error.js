@@ -1,10 +1,5 @@
-import { Link as RouterLink } from "react-router-dom";
-// material
-import { styled } from "@mui/material/styles";
 import { Box, Button, Typography, Container } from "@mui/material";
 // components
-
-import Page from "../componant/page";
 
 import { useTranslation } from "react-i18next";
 

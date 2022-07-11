@@ -12,6 +12,8 @@ import {
   Badge,
   InputLabel,
   FormControl,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -73,9 +75,31 @@ function Messages() {
 
   const [isloading, setisloading] = useState(true);
 
-  const [mesagges, setmesagges] = useState([]);
+  const [ReadMesagges, setReadMesagges] = useState([]);
+  const [UnReadMesagges, setUnReadMesagges] = useState([]);
 
-  const getmessages = async () => {
+  const [renderMessage, setrenderMessage] = useState([]);
+
+  const getReadMessages = async () => {
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+
+        url: "api/feedbackReadView",
+        method: "GET",
+      }).then((res) => {
+        // handle success
+        console.log("Read messages is : ", res.data);
+        setReadMesagges(res.data);
+        setisloading(false);
+      });
+    } catch (e) {
+      // handle error
+      console.error(e);
+    }
+  };
+
+  const getUnreadMessages = async () => {
     try {
       await instance({
         // url of the api endpoint (can be changed)
@@ -83,8 +107,8 @@ function Messages() {
         method: "GET",
       }).then((res) => {
         // handle success
-        console.log("messages is : ", res.data);
-        setmesagges(res.data);
+        console.log("unRead messages is : ", res.data);
+        setUnReadMesagges(res.data);
         setisloading(false);
       });
     } catch (e) {
@@ -94,8 +118,28 @@ function Messages() {
   };
 
   useEffect(() => {
-    getmessages();
+    getReadMessages();
+    getUnreadMessages();
   }, []);
+
+  const [alignment, setAlignment] = React.useState("All");
+
+  const handleChange = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
+
+  const viewRead = () => {
+    setrenderMessage(ReadMesagges);
+  };
+
+  const viewUnRead = () => {
+    setrenderMessage(UnReadMesagges);
+  };
+
+  const viewall = async () => {
+    await setrenderMessage([...UnReadMesagges, ...ReadMesagges]);
+    console.log("sett all value" + renderMessage);
+  };
 
   return (
     <>
@@ -104,8 +148,41 @@ function Messages() {
         <Typography variant="h3">Loading...</Typography>
       ) : (
         <>
+          <ToggleButtonGroup
+            color="primary"
+            value={alignment}
+            exclusive
+            onChange={handleChange}
+            sx={{ paddingBottom: "20px" }}
+          >
+            <ToggleButton
+              onClick={() => {
+                viewall();
+              }}
+              value="All"
+            >
+              All
+            </ToggleButton>
+            <ToggleButton
+              onClick={() => {
+                viewRead();
+              }}
+              value="Read"
+            >
+              Read
+            </ToggleButton>
+            <ToggleButton
+              onClick={() => {
+                viewUnRead();
+              }}
+              value="unread"
+            >
+              unread
+            </ToggleButton>
+          </ToggleButtonGroup>
+
           <Grid container spacing={3}>
-            {mesagges.map((msg) => (
+            {renderMessage.map((msg) => (
               <Grid key={msg.id} item xs={12} sm={6} md={3}>
                 <MessageCard
                   avatar={msg.message}
@@ -119,7 +196,7 @@ function Messages() {
           </Grid>
 
           <Grid container spacing={3}>
-            {mesagges.map((msg) => (
+            {renderMessage.map((msg) => (
               <Grid key={msg.id} item xs={12} sm={6} md={3}>
                 <Card style={secondery}>
                   <Box sx={{ pt: "100%", position: "relative" }}>

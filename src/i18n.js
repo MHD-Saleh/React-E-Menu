@@ -7,7 +7,7 @@ i18n
   .use(HttpApi)
   .init({
     fallbackLng: "ar",
-
+    debug: true,
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
