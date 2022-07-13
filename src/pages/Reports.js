@@ -12,20 +12,11 @@ const Reports = (props) => {
     stroke: { width: [0, 2, 3] },
     plotOptions: { bar: { columnWidth: "11%", borderRadius: 4 } },
     fill: { type: ["solid", "gradient", "solid"] },
-    labels: [
-      "01/01/2022",
-      "02/01/2022",
-      "03/01/2022",
-      "04/01/2022",
-      "05/01/2022",
-      "06/01/2022",
-      "07/01/2022",
-      "08/01/2022",
-      "09/01/2022",
-      "10/01/2022",
-      "11/01/2022",
-    ],
-    xaxis: { type: "datetime" },
+    xaxis: {
+      labels: {
+        format: "dd/MM",
+      },
+    },
     tooltip: {
       shared: true,
       intersect: false,

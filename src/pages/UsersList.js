@@ -148,6 +148,25 @@ export default function User() {
 
   const isUserNotFound = filteredUsers.length === 0;
 
+  const deleteUser = async (dd) => {
+    //api/productDelete
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: `api/usersDelete/${dd}`,
+        method: "POST",
+      }).then((res) => {
+        // handle success
+        console.log("user deleted");
+
+        getuser();
+      });
+    } catch (e) {
+      // handle error
+      console.error(e);
+    }
+  };
+
   //api/customerView
   const getuser = async () => {
     try {
@@ -266,7 +285,15 @@ export default function User() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <UserMoreMenu />
+                            <UserMoreMenu
+                              edite={() => {
+                                console.log("edite : " + id);
+                              }}
+                              delete={() => {
+                                console.log("delete : " + id);
+                                deleteUser(id);
+                              }}
+                            />
                           </TableCell>
                         </TableRow>
                       );

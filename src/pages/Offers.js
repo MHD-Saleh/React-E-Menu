@@ -3,12 +3,20 @@ import SB from "../componant/SB";
 //import pusherJs from "pusher-js";
 
 import React, { useState } from "react";
-import { Grid, Paper, Tab, TextField, Typography } from "@mui/material";
+import {
+  createTheme,
+  Grid,
+  Paper,
+  Tab,
+  TextField,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import { Box } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import EditType from "../componant/editType";
 import instance from "../authConfig/axios";
+import OfferTap from "../componant/OfferTap";
 
 const Offers = () => {
   // Enable pusher logging
@@ -27,36 +35,10 @@ const Offers = () => {
     //alert(JSON.stringify(data));
   });*/
 
-  const [Type, setType] = useState("");
-
-  const handleSetType = (e) => {
-    setType(e.target.value);
-  };
-
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-
-  const postType = async () => {
-    //api/typeStore
-    try {
-      await instance({
-        // url of the api endpoint (can be changed)
-        url: `api/typeStore`,
-        method: "POST",
-        data: {
-          name: Type,
-        },
-      }).then((res) => {
-        // handle success
-        console.log("created");
-      });
-    } catch (e) {
-      // handle error
-      console.error(e);
-    }
   };
 
   return (
@@ -70,41 +52,7 @@ const Offers = () => {
           </TabList>
         </Box>
         <TabPanel value="1">
-          <Paper sx={{ padding: "50px", margin: "20px" }}>
-            <Typography variant="h3" sx={{ paddingBottom: "30px" }}>
-              Offer Name
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                "& .MuiTextField-root": { width: "25ch" },
-                alignItems: "center",
-              }}
-            >
-              <TextField
-                sx={{ paddingBottom: "30px", width: "100px" }}
-                margin="dense"
-                id="offer"
-                label="Offer Name"
-                type="text"
-                name="offer"
-                value={Type}
-                onChange={handleSetType}
-              />
-
-              <Button
-                sx={{ width: "70px" }}
-                color="primary"
-                variant="contained"
-                onClick={() => {
-                  postType();
-                }}
-              >
-                Submit
-              </Button>
-            </Box>
-          </Paper>
+          <OfferTap />
         </TabPanel>
         <TabPanel value="2">
           <EditType />

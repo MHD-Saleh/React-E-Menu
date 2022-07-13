@@ -10,11 +10,13 @@ import {
 } from "@mui/material";
 // component
 
-import Iconify from "../Iconify";
+import Iconify from "./Iconify";
+import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 // ----------------------------------------------------------------------
 
-export default function UserMoreMenu(props) {
+export default function CardMoreOption() {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -34,12 +36,12 @@ export default function UserMoreMenu(props) {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <MenuItem onClick={props.delete} sx={{ color: "text.secondary" }}>
+        <MenuItem sx={{ color: "text.secondary" }}>
           <ListItemIcon>
-            <Iconify icon="eva:trash-2-outline" width={24} height={24} />
+            <HourglassBottomIcon />
           </ListItemIcon>
           <ListItemText
-            primary="Delete"
+            primary="Going on"
             primaryTypographyProps={{ variant: "body2" }}
           />
         </MenuItem>
@@ -48,13 +50,12 @@ export default function UserMoreMenu(props) {
           component={RouterLink}
           to="#"
           sx={{ color: "text.secondary" }}
-          onClick={props.edite}
         >
           <ListItemIcon>
-            <Iconify icon="eva:edit-outline" width={24} height={24} />
+            <CheckCircleIcon />
           </ListItemIcon>
           <ListItemText
-            primary="Edit"
+            primary="Done"
             primaryTypographyProps={{ variant: "body2" }}
           />
         </MenuItem>

@@ -4,7 +4,9 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
+import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper";
@@ -14,17 +16,26 @@ import "swiper/css/pagination";
 import "./styles.css";
 import moment from "moment";
 
-import { Avatar, CardActions, CardHeader, Grid } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  CardActions,
+  CardHeader,
+  Divider,
+  Grid,
+} from "@mui/material";
 import { useTranslation } from "react-i18next";
 import instance from "../authConfig/axios";
 import MessageCard from "../componant/MessageCard";
 import DialogPopup from "../componant/DialogPopup";
+import CardMoreOption from "../componant/CardMoreOption";
 
 const MainDashboard = () => {
   const [isloading, setisloading] = React.useState(true);
   const navigate = useNavigate();
 
   const [Cart, setCart] = useState([]);
+  const [CartGoning, setCartGoning] = useState([]);
 
   const GetCart = async () => {
     //api/cartView
@@ -44,8 +55,47 @@ const MainDashboard = () => {
     }
   };
 
+  const GetCartGoning = async () => {
+    //api/cartView
+
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: "api/cartGoingView",
+        method: "GET",
+      }).then((res) => {
+        // handle success
+
+        setCartGoning(res.data);
+        setisloading(false);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  //api/cartgoing/1
+
+  const setGoingOn = async (dd) => {
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: `api/cartGoing/${dd}`,
+        method: "POST",
+      }).then(() => {
+        // handle success
+        GetCartGoning();
+        GetCart();
+      });
+    } catch (e) {
+      // handle error
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     GetCart();
+    GetCartGoning();
   }, []);
 
   const [open, setOpen] = React.useState(false);
@@ -58,6 +108,8 @@ const MainDashboard = () => {
 
   const [grid, setgrid] = React.useState([]);
 
+  const [username, setusername] = React.useState("");
+
   const my_order = [];
 
   const get_od = (id) => {
@@ -65,26 +117,23 @@ const MainDashboard = () => {
 
     let obj = Cart.find((i) => i.id === id);
     setodr(obj);
+    setusername(obj.customer.name);
     //console.log("Cart with " + id + " is : " + JSON.stringify(obj));
 
     let orrder = obj.order;
 
     console.log("order " + id + " is : " + JSON.stringify(orrder));
 
-    /*
-    setodr(Cart[id - 1].order);
-    console.log("item from Get_od" + JSON.stringify(Cart[id - 1].order));
-    odr.map((item) =>
+    orrder.map((item, index) =>
       my_order.push({
-        id: item.id,
+        id: index + 1,
         name: item.product.name,
         quantity: item.qtu,
         message: item.message,
       })
     );
     setgrid(my_order);
-    console.log("my new array" + JSON.stringify(my_order));
-    console.log("my new grid " + JSON.stringify(grid));*/
+    console.log("my array is : " + JSON.stringify(my_order));
   };
 
   const handleClose = async () => {
@@ -101,69 +150,103 @@ const MainDashboard = () => {
             <Typography variant="h2">nothink here</Typography>
           ) : (
             <>
-              <Swiper
-                autoplay={{
-                  delay: 2500,
-                  disableOnInteraction: false,
+              <Box
+                bgcolor="primary.main"
+                sx={{
+                  borderRadius: 2,
+                  paddingBottom: "20px",
                 }}
-                pagination={{
-                  clickable: true,
-                  type: "fraction",
-                }}
-                cssMode={true}
-                navigation={true}
-                modules={[Navigation, Pagination, Autoplay]}
-                className="mySwiper"
-                spaceBetween={20}
-                slidesPerView={3}
               >
-                {Cart.map((elem) => (
-                  <SwiperSlide key={elem.id}>
-                    <CurrenOrder
-                      amount={elem.amount}
-                      state={elem.status}
-                      table={elem.table_number}
-                      id={elem.id}
-                      time={elem.time}
-                      click={() => {
-                        // handelMoreInfo(elem.id);
-                        get_od(elem.id);
-                        handleClickOpen();
-                      }}
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+                <Typography
+                  sx={{
+                    marginBottom: "10px",
+                    paddingLeft: "20px",
+                    paddingTop: "5px",
+                    width: 280,
+                    height: 50,
+                    backgroundColor: "primary.main",
+                    color: "white",
+                    borderRadius: "10px",
+                  }}
+                  variant="h3"
+                >
+                  waiting Orders:
+                </Typography>
+                <Swiper
+                  autoplay={{
+                    delay: 3500,
+                    disableOnInteraction: false,
+                  }}
+                  pagination={{
+                    clickable: true,
+                    type: "fraction",
+                  }}
+                  cssMode={true}
+                  navigation={true}
+                  modules={[Navigation, Pagination, Autoplay]}
+                  className="mySwiper"
+                  spaceBetween={20}
+                  slidesPerView={3}
+                >
+                  {Cart.map((elem) => (
+                    <SwiperSlide key={elem.id}>
+                      <CurrenOrder
+                        amount={elem.amount}
+                        state={elem.status}
+                        table={elem.table_number}
+                        id={elem.id}
+                        time={elem.time}
+                        click={() => {
+                          // handelMoreInfo(elem.id);
+                          get_od(elem.id);
+                          handleClickOpen();
+                        }}
+                        setgoing={() => {
+                          setGoingOn(elem.id);
+                        }}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </Box>
             </>
           )}
-          <Typography sx={{ marginTop: "20px" }} variant="h3">
+          <Divider
+            sx={{
+              borderBottomWidth: 5,
+              paddingTop: "20px",
+              borderColor: "gray",
+            }}
+          />
+          <Typography
+            sx={{
+              marginTop: "20px",
+              marginBottom: "10px",
+              paddingLeft: "20px",
+              width: 280,
+              height: 50,
+              backgroundColor: "primary.main",
+              color: "white",
+              borderRadius: "10px",
+            }}
+            variant="h3"
+          >
             Serverd Orders:
           </Typography>
-
-          <Button
-            onClick={() => {
-              get_od(1);
-              //setOpenT(true);
-              handleClickOpen();
-            }}
-          >
-            test
-          </Button>
           <Grid sx={{ marginTop: "20px" }} container spacing={3}>
-            {Cart.map((item) => {
-              if (item.status === "waiting") {
-                return (
-                  <Grid key={item.id} item xs={12} sm={6} md={3}>
-                    <MessageCard
-                      avatar={item.customer.points}
-                      title={item.customer.name}
-                      date={moment(item.created_at).format("YYYY/MM/DD")}
-                      content={`${item.time} min`}
-                      expaned={item.message}
-                    />
-                  </Grid>
-                );
-              }
+            {CartGoning.map((item) => {
+              return (
+                <Grid key={item.id} item xs={12} sm={6} md={3}>
+                  <MessageCard
+                    avatar={item.id}
+                    title={item.customer.name}
+                    date={moment(item.created_at).format("YYYY/MM/DD")}
+                    content={`${item.time} min`}
+                    expaned={item.message}
+                    withmore="true"
+                  />
+                </Grid>
+              );
             })}
           </Grid>
           <DialogPopup
@@ -174,8 +257,8 @@ const MainDashboard = () => {
             id={odr.id}
             odr={grid}
             time={odr.time}
+            custName={username}
             ammount={odr.amount}
-            custName={odr.customer.name}
             tableNumber={odr.table_number}
           ></DialogPopup>
         </div>
@@ -204,9 +287,22 @@ const CurrenOrder = (probs) => {
           </Avatar>
         }
         action={
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
+          <>
+            <IconButton
+              sx={{
+                backgroundColor: "green",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "black",
+                },
+              }}
+              size="small"
+              aria-label="Check"
+              onClick={probs.setgoing}
+            >
+              <HourglassBottomIcon />
+            </IconButton>
+          </>
         }
         title={probs.id}
         subheader={i18n.t("time") + probs.time}

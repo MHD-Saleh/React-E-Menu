@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import instance from "../authConfig/axios";
 import { styled } from "@mui/material/styles";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import {
   Box,
   Card,
@@ -14,6 +17,7 @@ import {
   FormControl,
   ToggleButtonGroup,
   ToggleButton,
+  IconButton,
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -117,6 +121,28 @@ function Messages() {
     }
   };
 
+  const updateStete = async (dd) => {
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: `api/feedbackRead/${dd}`,
+        method: "POST",
+      }).then((res) => {
+        // handle success
+
+        doupdate();
+      });
+    } catch (e) {
+      // handle error
+      console.error(e);
+    }
+  };
+
+  function doupdate() {
+    getReadMessages();
+    getUnreadMessages();
+  }
+
   useEffect(() => {
     getReadMessages();
     getUnreadMessages();
@@ -158,6 +184,7 @@ function Messages() {
             <ToggleButton
               onClick={() => {
                 viewall();
+                doupdate();
               }}
               value="All"
             >
@@ -185,11 +212,27 @@ function Messages() {
             {renderMessage.map((msg) => (
               <Grid key={msg.id} item xs={12} sm={6} md={3}>
                 <MessageCard
-                  avatar={msg.message}
+                  avatar={msg.id}
                   title={msg.customer_id}
                   date={moment(msg.created_at).format("YYYY/MM/DD")}
                   content={msg.message}
                   expaned={msg.message}
+                  withmore="false"
+                  icon={
+                    <>
+                      <IconButton aria-label="Delete">
+                        <DeleteIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="Check"
+                        onClick={() => {
+                          updateStete(msg.id);
+                        }}
+                      >
+                        <CheckCircleIcon />
+                      </IconButton>
+                    </>
+                  }
                 />
               </Grid>
             ))}
