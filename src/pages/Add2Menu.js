@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid, GridColDef, GridApi, GridCellValue } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
@@ -33,6 +33,7 @@ const theme = createTheme({
 });
 
 const Add2Menu = () => {
+  const [isloading, setisloading] = React.useState(true);
   const navigate = useNavigate();
   const columns2 = [
     {
@@ -219,7 +220,7 @@ const Add2Menu = () => {
 
   const GetBefore = async () => {
     //api/outOfMenu
-
+    setisloading(true);
     try {
       await instance({
         // url of the api endpoint (can be changed)
@@ -227,12 +228,16 @@ const Add2Menu = () => {
         method: "GET",
       }).then((res) => {
         // handle success
-
+        setisloading(false);
         setoutOfMenu(res.data);
       });
     } catch (e) {
       // handle error
       console.error(e);
+      if (e.response.status === 401) {
+        navigate("/login");
+        localStorage.removeItem("mytoken");
+      }
       //handelClick();
       //setmessage("error with get outofmenu List");
     }
@@ -242,6 +247,7 @@ const Add2Menu = () => {
   const [Menu, setMenu] = useState([]);
 
   const GetAfter = async () => {
+    setisloading(true);
     try {
       await instance({
         // url of the api endpoint (can be changed)
@@ -249,12 +255,16 @@ const Add2Menu = () => {
         method: "GET",
       }).then((res) => {
         // handle success
-
+        setisloading(false);
         setMenu(res.data);
       });
     } catch (e) {
       // handle error
       console.error(e);
+      if (e.response.status === 401) {
+        navigate("/login");
+        localStorage.removeItem("mytoken");
+      }
       //handelClick();
       //setmessage("error with get outofmenu List");
     }
@@ -263,6 +273,7 @@ const Add2Menu = () => {
   //Store To Actual Menu
   //http://127.0.0.1:8000/api/menuStore
   const AddMainMenu = async (id) => {
+    setisloading(true);
     try {
       await instance({
         // url of the api endpoint (can be changed)
@@ -280,12 +291,17 @@ const Add2Menu = () => {
     } catch (e) {
       // handle error
       console.error(e);
+      if (e.response.status === 401) {
+        navigate("/login");
+        localStorage.removeItem("mytoken");
+      }
     }
   };
 
   //delete from Actual Menu
   //http://127.0.0.1:8000/api/menuDelete/2
   const DeleteMainMenu = async (id) => {
+    setisloading(true);
     try {
       await instance({
         // url of the api endpoint (can be changed)
@@ -300,6 +316,10 @@ const Add2Menu = () => {
     } catch (e) {
       // handle error
       console.error(e);
+      if (e.response.status === 401) {
+        navigate("/login");
+        localStorage.removeItem("mytoken");
+      }
       //handelClick();
       //setmessage("error with Delete item");
     }
@@ -313,95 +333,103 @@ const Add2Menu = () => {
   }, []);
 
   return (
-    <div>
-      <Typography
-        variant="h3"
-        sx={{
-          paddingLeft: "20px",
-          width: 320,
-          height: 50,
-          backgroundColor: "primary.main",
-          color: "white",
-          borderRadius: "10px",
-        }}
-      >
-        Add to Menu Page
-      </Typography>
-      <div style={theme.splitScreen}>
-        <div style={theme.leftPane}>
-          {" "}
+    <>
+      {isloading ? (
+        <>
+          <Typography variant="h2">Loading ...</Typography>
+        </>
+      ) : (
+        <div>
           <Typography
-            sx={{ mb: "25px", mt: "15px", fontFamily: "Monospace" }}
-            variant="subtitle1"
-          >
-            Items From Menu
-          </Typography>
-          <div style={{ height: 400, width: "100%" }}>
-            <DataGrid
-              rows={Menu}
-              columns={columns}
-              pageSize={5}
-              rowsPerPageOptions={[5]}
-              sx={{
-                "& .super-app-theme--header": {
-                  color: "white",
-                  backgroundColor: "primary.main",
-                },
-                border: 1,
-                "& .MuiDataGrid-row:nth-child(even)": {
-                  backgroundColor: "#66bb6a",
-                },
-
-                borderColor: "primary.light",
-                "& .MuiDataGrid-cell:hover": {
-                  color: "primary.main",
-                },
-              }}
-            />
-          </div>
-        </div>
-        <div style={theme.rightPane}>
-          {" "}
-          <Typography
-            sx={{ mb: "25px", mt: "15px", fontFamily: "Monospace" }}
-            variant="subtitle1"
-          >
-            Items From Products
-          </Typography>
-          <DataGrid
-            rows={outOfMenu}
-            columns={columns2}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
+            variant="h3"
             sx={{
-              "& .super-app-theme--header": {
-                color: "white",
-                backgroundColor: "primary.main",
-              },
-              border: 1,
-              borderColor: "primary.light",
-              "& .MuiDataGrid-cell:hover": {
-                color: "primary.main",
-              },
+              paddingLeft: "20px",
+              width: 320,
+              height: 50,
+              backgroundColor: "primary.main",
+              color: "white",
+              borderRadius: "10px",
             }}
+          >
+            Add to Menu Page
+          </Typography>
+          <div style={theme.splitScreen}>
+            <div style={theme.leftPane}>
+              {" "}
+              <Typography
+                sx={{ mb: "25px", mt: "15px", fontFamily: "Monospace" }}
+                variant="subtitle1"
+              >
+                Items From Menu
+              </Typography>
+              <div style={{ height: 400, width: "100%" }}>
+                <DataGrid
+                  rows={Menu}
+                  columns={columns}
+                  pageSize={5}
+                  rowsPerPageOptions={[5]}
+                  sx={{
+                    "& .super-app-theme--header": {
+                      color: "white",
+                      backgroundColor: "primary.main",
+                    },
+                    border: 1,
+                    "& .MuiDataGrid-row:nth-child(even)": {
+                      backgroundColor: "#66bb6a",
+                    },
+
+                    borderColor: "primary.light",
+                    "& .MuiDataGrid-cell:hover": {
+                      color: "primary.main",
+                    },
+                  }}
+                />
+              </div>
+            </div>
+            <div style={theme.rightPane}>
+              {" "}
+              <Typography
+                sx={{ mb: "25px", mt: "15px", fontFamily: "Monospace" }}
+                variant="subtitle1"
+              >
+                Items From Products
+              </Typography>
+              <DataGrid
+                rows={outOfMenu}
+                columns={columns2}
+                pageSize={5}
+                rowsPerPageOptions={[5]}
+                sx={{
+                  "& .super-app-theme--header": {
+                    color: "white",
+                    backgroundColor: "primary.main",
+                  },
+                  border: 1,
+                  borderColor: "primary.light",
+                  "& .MuiDataGrid-cell:hover": {
+                    color: "primary.main",
+                  },
+                }}
+              />
+            </div>
+          </div>
+          <SB
+            open={openSuccess}
+            handelClose={handelCloseSuccess}
+            type="success"
+            message="Done"
+            time={3000}
+          />
+          <SB
+            open={openError}
+            handelClose={handelCloseError}
+            type="error"
+            message="error!"
+            time={3000}
           />
         </div>
-      </div>
-      <SB
-        open={openSuccess}
-        handelClose={handelCloseSuccess}
-        type="success"
-        message="Done"
-        time={3000}
-      />
-      <SB
-        open={openError}
-        handelClose={handelCloseError}
-        type="error"
-        message="error!"
-        time={3000}
-      />
-    </div>
+      )}
+    </>
   );
 };
 

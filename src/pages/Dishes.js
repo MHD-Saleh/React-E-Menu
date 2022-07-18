@@ -147,6 +147,7 @@ export default function ProductList({ ...other }) {
   const handleChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
+  const [isloading, setisloading] = React.useState(true);
 
   const TypeCatogory = async () => {
     //http://127.0.0.1:8000/api/typeView
@@ -181,7 +182,7 @@ export default function ProductList({ ...other }) {
           price: state.Price,
           image: state.Img,
           priceSale: state.PriceSale,
-          status: checked === true ? "sale" : "",
+          status: checked === true ? "offer" : "",
           details: state.desc,
         },
       }).then((res) => {
@@ -213,7 +214,7 @@ export default function ProductList({ ...other }) {
           price: Eprice,
           image: EImg,
           priceSale: EPriceSale,
-          status: checked === true ? "sale" : "",
+          status: checked === true ? "offer" : "",
           details: Edesc,
         },
       }).then((res) => {
@@ -261,12 +262,17 @@ export default function ProductList({ ...other }) {
         // handle success
         console.log(res.data);
         setdishs(res.data);
+        setisloading(false);
       });
     } catch (e) {
       // handle error
       console.error(e);
       handelClick();
-      setmessage("error with get product List");
+      setmessage("error with get product List " + e.response.status);
+      if (e.response.status === 401) {
+        navigate("/login");
+        localStorage.removeItem("mytoken");
+      }
     }
   };
 
@@ -333,418 +339,435 @@ export default function ProductList({ ...other }) {
 
   return (
     <>
-      <Typography
-        variant="h3"
-        sx={{
-          paddingLeft: "20px",
-          width: 180,
-          height: 50,
-          backgroundColor: "primary.main",
-          color: "white",
-          borderRadius: "10px",
-        }}
-      >
-        Products
-      </Typography>
-      <div>
-        <RootStyle>
-          <Badge
-            onClick={() => {
-              handleClickOpen();
-              handelClick();
+      {" "}
+      {isloading ? (
+        <>
+          <Typography variant="h2">Loading ...</Typography>
+        </>
+      ) : (
+        <>
+          <Typography
+            variant="h3"
+            sx={{
+              paddingLeft: "20px",
+              width: 180,
+              height: 50,
+              backgroundColor: "primary.main",
+              color: "white",
+              borderRadius: "10px",
             }}
-            showZero
-            badgeContent={dish.length}
-            color="error"
-            max={99}
           >
-            <Iconify icon="carbon:add-filled" width={40} height={40} />
-          </Badge>
-        </RootStyle>
-        <Snackbar
-          open={openAlert}
-          onClose={handelClose}
-          autoHideDuration={3000}
-          //message="test Snack"
-        >
-          <Alert onClose={handelClose} severity="error">
-            {message}
-          </Alert>
-        </Snackbar>
-        <Grid container spacing={3}>
-          {dish.map((dishes) => (
-            <Grid key={dishes.id} item xs={12} sm={6} md={3}>
-              <Card style={secondery}>
-                <Box sx={{ pt: "100%", position: "relative" }}>
-                  {dishes.status && (
-                    <Label
-                      variant="filled"
-                      color={(dishes.status === "sale" && "error") || "info"}
-                      sx={{
-                        zIndex: 9,
-                        top: 16,
-                        right: 16,
-                        position: "absolute",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      {dishes.status}
-                    </Label>
-                  )}
-                  <ProductImgStyle alt={dishes.name} src={dishes.image} />
-                </Box>
-
-                <Stack spacing={2} sx={{ p: 3 }}>
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    <Link
-                      to="#"
-                      color="inherit"
-                      underline="hover"
-                      component={RouterLink}
-                    >
-                      <Rating name="read-only" value={dishes.rate} readOnly />
-                      <Typography
-                        variant="subtitle2"
-                        noWrap
-                        onClick={() => {
-                          setEtype(dishes.type_id);
-                          console.log(dishes.name);
-                          setEname(dishes.name);
-                          setEprice(dishes.price);
-                          setEPriceSale(dishes.priceSale);
-                          setETime(dishes.time);
-                          setEImg(dishes.image);
-                          setEdesc(dishes.details);
-                          setEdit(true);
-                          setEID(dishes.id);
-                          if (dishes.status === "sale") {
-                            setEStatus(true);
-                          } else {
-                            setEStatus(false);
-                          }
-                        }}
-                      >
-                        {dishes.name}
-                      </Typography>
-                    </Link>
-                  </Stack>
-
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    <Typography variant="subtitle1">
-                      <Typography
-                        component="span"
-                        variant="body1"
-                        sx={{
-                          color: "text.disabled",
-                          textDecoration: "line-through",
-                        }}
-                      >
-                        {dishes.priceSale && dishes.priceSale}
-                      </Typography>
-                      &nbsp;
-                      {dishes.price} SP
-                    </Typography>
-                    <Button
-                      onClick={() => {
-                        deleteItem(dishes.id);
-                      }}
-                      variant="contained"
-                      color="error"
-                    >
-                      {i18n.t("delete")}
-                    </Button>
-                  </Stack>
-                </Stack>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Add Item</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              add the Details here and click save
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              type="text"
-              fullWidth
-              label="Item Name"
-              name="ItemName"
-              value={state.ItemName}
-              onChange={handleChange}
-              error={state.ItemName === ""}
-              helperText={state.ItemName === "" ? "Please Enter Name" : ""}
-            />
-            <TextField
-              margin="dense"
-              id="price"
-              label="Item Price"
-              type="number"
-              fullWidth
-              name="Price"
-              value={state.Price}
-              onChange={handleChange}
-              onKeyPress={(event) => {
-                if (!/[0-9]/.test(event.key)) {
-                  event.preventDefault();
-                }
-              }}
-              error={state.Price === ""}
-              helperText={state.Price === "" ? "Please Enter price" : ""}
-            />
-            <TextField
-              margin="dense"
-              id="PriceSale"
-              label="Item Price after Sale"
-              type="number"
-              fullWidth
-              name="PriceSale"
-              value={state.PriceSale}
-              onChange={handleChange}
-              onKeyPress={(event) => {
-                if (!/[0-9]/.test(event.key)) {
-                  event.preventDefault();
-                }
-              }}
-            />
-            <TextField
-              margin="dense"
-              id="Time"
-              label="Item time to prepare"
-              type="number"
-              fullWidth
-              name="Time"
-              value={state.Time}
-              onChange={handleChange}
-              onKeyPress={(event) => {
-                if (!/[0-9]/.test(event.key)) {
-                  event.preventDefault();
-                }
-              }}
-              error={state.Time === ""}
-              helperText={state.Time === "" ? "Please Enter Time" : ""}
-            />
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch checked={checked} onChange={handleSwitchChange} />
-                }
-                label="Status"
-              />
-            </FormGroup>
-
-            <TextField
-              margin="dense"
-              id="Img"
-              label="Item image Link"
-              type="text"
-              fullWidth
-              name="Img"
-              value={state.Img}
-              onChange={handleChange}
-            />
-            <TextField
-              margin="dense"
-              id="desc"
-              label="Item Description"
-              type="text"
-              fullWidth
-              rows={2}
-              multiline
-              name="desc"
-              value={state.desc}
-              onChange={handleChange}
-              error={state.desc === ""}
-              helperText={state.desc === "" ? "Please Enter Description" : ""}
-            />
-            <FormControl fullWidth>
-              <InputLabel id="type-menu">select Type</InputLabel>
-              <Select
-                margin="dense"
-                labelId="type-menu"
-                id="type-menu"
-                value={Type}
-                label="select"
-                onChange={handel_type}
-                autoWidth
-              >
-                {type_Id.map((this_type) => (
-                  <MenuItem key={this_type.id} value={this_type.id}>
-                    {this_type.name} + {this_type.id}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button
-              onClick={() => {
-                if (
-                  state.ItemName === "" ||
-                  state.Price === "" ||
-                  state.Img === "" ||
-                  state.desc === "" ||
-                  state.Time === ""
-                ) {
-                  handleClose();
+            Products
+          </Typography>
+          <div>
+            <RootStyle>
+              <Badge
+                onClick={() => {
+                  handleClickOpen();
                   handelClick();
-                  setmessage("error with adding product");
-                } else {
-                  createPost();
-
-                  handleClose();
-                }
-              }}
-            >
-              Save
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Dialog open={edit} onClose={handleEditClose}>
-          <DialogTitle>Edit Item</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Edit the Details here and click update
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              type="text"
-              fullWidth
-              label="Item Name"
-              name="ItemName"
-              value={EName}
-              onChange={handleSetEditName}
-              error={EName === ""}
-              helperText={EName === "" ? "Please Enter Name" : ""}
-            />
-            <TextField
-              margin="dense"
-              id="price"
-              label="Item Price"
-              type="number"
-              fullWidth
-              name="Price"
-              value={Eprice}
-              onChange={handleSetEditPrice}
-              onKeyPress={(event) => {
-                if (!/[0-9]/.test(event.key)) {
-                  event.preventDefault();
-                }
-              }}
-              error={Eprice === ""}
-              helperText={Eprice === "" ? "Please Enter price" : ""}
-            />
-            <TextField
-              margin="dense"
-              id="PriceSale"
-              label="Item Price after Sale"
-              type="number"
-              fullWidth
-              name="PriceSale"
-              value={EPriceSale}
-              onChange={handleSetEditPriceSale}
-              onKeyPress={(event) => {
-                if (!/[0-9]/.test(event.key)) {
-                  event.preventDefault();
-                }
-              }}
-            />
-
-            <TextField
-              margin="dense"
-              id="Time"
-              label="Item Time to prepare"
-              type="number"
-              fullWidth
-              name="Time"
-              value={ETime}
-              onChange={handleSetsetETime}
-              onKeyPress={(event) => {
-                if (!/[0-9]/.test(event.key)) {
-                  event.preventDefault();
-                }
-              }}
-            />
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch checked={EStatus} onChange={handlesetEStatus} />
-                }
-                label="Status"
-              />
-            </FormGroup>
-
-            <TextField
-              margin="dense"
-              id="Img"
-              label="Item image Link"
-              type="text"
-              fullWidth
-              name="Img"
-              value={EImg}
-              onChange={handleSetEditImg}
-            />
-            <TextField
-              margin="dense"
-              id="desc"
-              label="Item Description"
-              type="text"
-              fullWidth
-              rows={2}
-              multiline
-              name="desc"
-              value={Edesc}
-              onChange={handleSetEditdesc}
-              error={Edesc === ""}
-              helperText={Edesc === "" ? "Please Enter Description" : ""}
-            />
-            <FormControl fullWidth>
-              <InputLabel id="type-menu">select Type</InputLabel>
-              <Select
-                margin="dense"
-                labelId="type-menu"
-                id="type-menu"
-                value={Type}
-                label="select"
-                onChange={handel_type}
-                autoWidth
+                }}
+                showZero
+                badgeContent={dish.length}
+                color="error"
+                max={99}
               >
-                {type_Id.map((this_type) => (
-                  <MenuItem key={this_type.id} value={this_type.id}>
-                    {this_type.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleEditClose}>Cancel</Button>
-            <Button
-              onClick={() => {
-                updateItem(EID);
-
-                handleEditClose();
-              }}
+                <Iconify icon="carbon:add-filled" width={40} height={40} />
+              </Badge>
+            </RootStyle>
+            <Snackbar
+              open={openAlert}
+              onClose={handelClose}
+              autoHideDuration={3000}
+              //message="test Snack"
             >
-              Update
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
+              <Alert onClose={handelClose} severity="error">
+                {message}
+              </Alert>
+            </Snackbar>
+            <Grid container spacing={3}>
+              {dish.map((dishes) => (
+                <Grid key={dishes.id} item xs={12} sm={6} md={3}>
+                  <Card style={secondery}>
+                    <Box sx={{ pt: "100%", position: "relative" }}>
+                      {dishes.status && (
+                        <Label
+                          variant="filled"
+                          color={
+                            (dishes.status === "sale" && "error") || "info"
+                          }
+                          sx={{
+                            zIndex: 9,
+                            top: 16,
+                            right: 16,
+                            position: "absolute",
+                            textTransform: "uppercase",
+                          }}
+                        >
+                          {dishes.status}
+                        </Label>
+                      )}
+                      <ProductImgStyle alt={dishes.name} src={dishes.image} />
+                    </Box>
+
+                    <Stack spacing={2} sx={{ p: 3 }}>
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Link
+                          to="#"
+                          color="inherit"
+                          underline="hover"
+                          component={RouterLink}
+                        >
+                          <Rating
+                            name="read-only"
+                            value={dishes.rate}
+                            readOnly
+                          />
+                          <Typography
+                            variant="subtitle2"
+                            noWrap
+                            onClick={() => {
+                              setEtype(dishes.type_id);
+                              console.log(dishes.name);
+                              setEname(dishes.name);
+                              setEprice(dishes.price);
+                              setEPriceSale(dishes.priceSale);
+                              setETime(dishes.time);
+                              setEImg(dishes.image);
+                              setEdesc(dishes.details);
+                              setEdit(true);
+                              setEID(dishes.id);
+                              if (dishes.status === "sale") {
+                                setEStatus(true);
+                              } else {
+                                setEStatus(false);
+                              }
+                            }}
+                          >
+                            {dishes.name}
+                          </Typography>
+                        </Link>
+                      </Stack>
+
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Typography variant="subtitle1">
+                          <Typography
+                            component="span"
+                            variant="body1"
+                            sx={{
+                              color: "text.disabled",
+                              textDecoration: "line-through",
+                            }}
+                          >
+                            {dishes.priceSale && dishes.priceSale}
+                          </Typography>
+                          &nbsp;
+                          {dishes.price} SP
+                        </Typography>
+                        <Button
+                          onClick={() => {
+                            deleteItem(dishes.id);
+                          }}
+                          variant="contained"
+                          color="error"
+                        >
+                          {i18n.t("delete")}
+                        </Button>
+                      </Stack>
+                    </Stack>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle>Add Item</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  add the Details here and click save
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  type="text"
+                  fullWidth
+                  label="Item Name"
+                  name="ItemName"
+                  value={state.ItemName}
+                  onChange={handleChange}
+                  error={state.ItemName === ""}
+                  helperText={state.ItemName === "" ? "Please Enter Name" : ""}
+                />
+                <TextField
+                  margin="dense"
+                  id="price"
+                  label="Item Price"
+                  type="number"
+                  fullWidth
+                  name="Price"
+                  value={state.Price}
+                  onChange={handleChange}
+                  onKeyPress={(event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
+                  error={state.Price === ""}
+                  helperText={state.Price === "" ? "Please Enter price" : ""}
+                />
+                <TextField
+                  margin="dense"
+                  id="PriceSale"
+                  label="Item Price after Sale"
+                  type="number"
+                  fullWidth
+                  name="PriceSale"
+                  value={state.PriceSale}
+                  onChange={handleChange}
+                  onKeyPress={(event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
+                />
+                <TextField
+                  margin="dense"
+                  id="Time"
+                  label="Item time to prepare"
+                  type="number"
+                  fullWidth
+                  name="Time"
+                  value={state.Time}
+                  onChange={handleChange}
+                  onKeyPress={(event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
+                  error={state.Time === ""}
+                  helperText={state.Time === "" ? "Please Enter Time" : ""}
+                />
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch checked={checked} onChange={handleSwitchChange} />
+                    }
+                    label="Status"
+                  />
+                </FormGroup>
+
+                <TextField
+                  margin="dense"
+                  id="Img"
+                  label="Item image Link"
+                  type="text"
+                  fullWidth
+                  name="Img"
+                  value={state.Img}
+                  onChange={handleChange}
+                />
+                <TextField
+                  margin="dense"
+                  id="desc"
+                  label="Item Description"
+                  type="text"
+                  fullWidth
+                  rows={2}
+                  multiline
+                  name="desc"
+                  value={state.desc}
+                  onChange={handleChange}
+                  error={state.desc === ""}
+                  helperText={
+                    state.desc === "" ? "Please Enter Description" : ""
+                  }
+                />
+                <FormControl fullWidth>
+                  <InputLabel id="type-menu">select Type</InputLabel>
+                  <Select
+                    margin="dense"
+                    labelId="type-menu"
+                    id="type-menu"
+                    value={Type}
+                    label="select"
+                    onChange={handel_type}
+                    autoWidth
+                  >
+                    {type_Id.map((this_type) => (
+                      <MenuItem key={this_type.id} value={this_type.id}>
+                        {this_type.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button
+                  onClick={() => {
+                    if (
+                      state.ItemName === "" ||
+                      state.Price === "" ||
+                      state.Img === "" ||
+                      state.desc === "" ||
+                      state.Time === ""
+                    ) {
+                      handleClose();
+                      handelClick();
+                      setmessage("error with adding product");
+                    } else {
+                      createPost();
+
+                      handleClose();
+                    }
+                  }}
+                >
+                  Save
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog open={edit} onClose={handleEditClose}>
+              <DialogTitle>Edit Item</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Edit the Details here and click update
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  type="text"
+                  fullWidth
+                  label="Item Name"
+                  name="ItemName"
+                  value={EName}
+                  onChange={handleSetEditName}
+                  error={EName === ""}
+                  helperText={EName === "" ? "Please Enter Name" : ""}
+                />
+                <TextField
+                  margin="dense"
+                  id="price"
+                  label="Item Price"
+                  type="number"
+                  fullWidth
+                  name="Price"
+                  value={Eprice}
+                  onChange={handleSetEditPrice}
+                  onKeyPress={(event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
+                  error={Eprice === ""}
+                  helperText={Eprice === "" ? "Please Enter price" : ""}
+                />
+                <TextField
+                  margin="dense"
+                  id="PriceSale"
+                  label="Item Price after Sale"
+                  type="number"
+                  fullWidth
+                  name="PriceSale"
+                  value={EPriceSale}
+                  onChange={handleSetEditPriceSale}
+                  onKeyPress={(event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
+                />
+
+                <TextField
+                  margin="dense"
+                  id="Time"
+                  label="Item Time to prepare"
+                  type="number"
+                  fullWidth
+                  name="Time"
+                  value={ETime}
+                  onChange={handleSetsetETime}
+                  onKeyPress={(event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
+                />
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch checked={EStatus} onChange={handlesetEStatus} />
+                    }
+                    label="Status"
+                  />
+                </FormGroup>
+
+                <TextField
+                  margin="dense"
+                  id="Img"
+                  label="Item image Link"
+                  type="text"
+                  fullWidth
+                  name="Img"
+                  value={EImg}
+                  onChange={handleSetEditImg}
+                />
+                <TextField
+                  margin="dense"
+                  id="desc"
+                  label="Item Description"
+                  type="text"
+                  fullWidth
+                  rows={2}
+                  multiline
+                  name="desc"
+                  value={Edesc}
+                  onChange={handleSetEditdesc}
+                  error={Edesc === ""}
+                  helperText={Edesc === "" ? "Please Enter Description" : ""}
+                />
+                <FormControl fullWidth>
+                  <InputLabel id="type-menu">select Type</InputLabel>
+                  <Select
+                    margin="dense"
+                    labelId="type-menu"
+                    id="type-menu"
+                    value={Type}
+                    label="select"
+                    onChange={handel_type}
+                    autoWidth
+                  >
+                    {type_Id.map((this_type) => (
+                      <MenuItem key={this_type.id} value={this_type.id}>
+                        {this_type.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleEditClose}>Cancel</Button>
+                <Button
+                  onClick={() => {
+                    updateItem(EID);
+
+                    handleEditClose();
+                  }}
+                >
+                  Update
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        </>
+      )}
     </>
   );
 }

@@ -13,6 +13,7 @@ import { green, red } from "@mui/material/colors";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import CardMoreOption from "./CardMoreOption";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import instance from "../authConfig/axios";
 
 const ExpandMore = styled((props) => {
@@ -43,7 +44,13 @@ const MessageCard = (probs) => {
             {probs.avatar}
           </Avatar>
         }
-        action={probs.withmore === "true" ? <CardMoreOption /> : null}
+        action={
+          probs.withmore === "true" ? (
+            <CardMoreOption />
+          ) : (
+            <CheckCircleIcon onClick={probs.check} />
+          )
+        }
         title={probs.title}
         subheader={probs.date}
       />

@@ -15,6 +15,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "./styles.css";
 import moment from "moment";
+import img from "../image/bg.jpg";
 
 import {
   Avatar,
@@ -36,6 +37,7 @@ const MainDashboard = () => {
 
   const [Cart, setCart] = useState([]);
   const [CartGoning, setCartGoning] = useState([]);
+  const [CartDone, setCartDone] = useState([]);
 
   const GetCart = async () => {
     //api/cartView
@@ -74,6 +76,25 @@ const MainDashboard = () => {
     }
   };
 
+  const GetCartDone = async () => {
+    //api/cartView
+
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: "api/cartDoneView",
+        method: "GET",
+      }).then((res) => {
+        // handle success
+
+        setCartDone(res.data);
+        setisloading(false);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   //api/cartgoing/1
 
   const setGoingOn = async (dd) => {
@@ -81,6 +102,24 @@ const MainDashboard = () => {
       await instance({
         // url of the api endpoint (can be changed)
         url: `api/cartGoing/${dd}`,
+        method: "POST",
+      }).then(() => {
+        // handle success
+        GetCartGoning();
+        GetCart();
+        GetCartDone();
+      });
+    } catch (e) {
+      // handle error
+      console.error(e);
+    }
+  };
+
+  const setDone = async (dd) => {
+    try {
+      await instance({
+        // url of the api endpoint (can be changed)
+        url: `api/cartDone/${dd}`,
         method: "POST",
       }).then(() => {
         // handle success
@@ -96,6 +135,7 @@ const MainDashboard = () => {
   useEffect(() => {
     GetCart();
     GetCartGoning();
+    GetCartDone();
   }, []);
 
   const [open, setOpen] = React.useState(false);
@@ -147,7 +187,12 @@ const MainDashboard = () => {
       ) : (
         <div>
           {Cart.length === 0 ? (
-            <Typography variant="h2">nothink here</Typography>
+            <>
+              <Typography variant="h2">nothink here</Typography>
+              <Box display="flex" alignItems="center" justifyContent="center">
+                <img src={img} alt="login" />
+              </Box>
+            </>
           ) : (
             <>
               <Box
@@ -223,6 +268,39 @@ const MainDashboard = () => {
               marginTop: "20px",
               marginBottom: "10px",
               paddingLeft: "20px",
+              width: 320,
+              height: 50,
+              backgroundColor: "primary.main",
+              color: "white",
+              borderRadius: "10px",
+            }}
+            variant="h3"
+          >
+            Going on Orders:
+          </Typography>
+          <Grid sx={{ marginTop: "20px" }} container spacing={3}>
+            {CartGoning.map((item) => {
+              return (
+                <Grid key={item.id} item xs={12} sm={6} md={3}>
+                  <MessageCard
+                    avatar={item.id}
+                    title={item.customer.name}
+                    date={moment(item.created_at).format("YYYY/MM/DD")}
+                    content={`${item.amount} sp`}
+                    expaned={`${item.order.map(
+                      (e) => e.product.name + " : " + e.qtu + " "
+                    )}`}
+                    check={() => setDone(item.id)}
+                  />
+                </Grid>
+              );
+            })}
+          </Grid>
+          <Typography
+            sx={{
+              marginTop: "20px",
+              marginBottom: "10px",
+              paddingLeft: "20px",
               width: 280,
               height: 50,
               backgroundColor: "primary.main",
@@ -234,16 +312,18 @@ const MainDashboard = () => {
             Serverd Orders:
           </Typography>
           <Grid sx={{ marginTop: "20px" }} container spacing={3}>
-            {CartGoning.map((item) => {
+            {CartDone.map((item) => {
               return (
                 <Grid key={item.id} item xs={12} sm={6} md={3}>
                   <MessageCard
                     avatar={item.id}
                     title={item.customer.name}
                     date={moment(item.created_at).format("YYYY/MM/DD")}
-                    content={`${item.time} min`}
-                    expaned={item.message}
-                    withmore="true"
+                    content={`${item.amount} sp`}
+                    expaned={`${item.order.map(
+                      (e) => e.product.name + " : " + e.qtu + " "
+                    )}`}
+                    check={() => setDone(item.id)}
                   />
                 </Grid>
               );
@@ -332,79 +412,3 @@ const CurrenOrder = (probs) => {
     </Card>
   );
 };
-
-/*
-
-
-<Grid item container direction="column" xs={12} sm={6}>
-      <Typography variant="h6" gutterBottom className={classes.title}>
-        {i18n.t("summary")}
-      </Typography>
-      <Grid container>
-        <React.Fragment>
-          <Grid item xs={6}>
-            <Typography gutterBottom>{i18n.t("Fname")}:</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography gutterBottom>{firstName}</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography gutterBottom>{i18n.t("Lname")}:</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography gutterBottom>{lastName}</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography gutterBottom>{i18n.t("Rname")}:</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography gutterBottom>{RestaurantName}</Typography>
-          </Grid>
-        </React.Fragment>
-      </Grid>
-    </Grid>
-*/
-
-/*
-
-     <Typography
-            sx={{ fontSize: 14 }}
-            style={{
-              float: "left",
-            }}
-            color="green"
-            gutterBottom
-          >
-            Amount :
-          </Typography>
-          <Typography
-            sx={{ fontSize: 14 }}
-            style={{
-              float: "right",
-            }}
-            color="red"
-            gutterBottom
-          >
-            {amount}
-          </Typography>
-          <Typography
-            sx={{ fontSize: 14 }}
-            style={{
-              float: "left",
-            }}
-            color="green"
-            gutterBottom
-          >
-            Status :
-          </Typography>
-          <Typography
-            sx={{ fontSize: 14 }}
-            style={{
-              float: "right",
-            }}
-            color="red"
-            gutterBottom
-          >
-            {Status}
-          </Typography>
-          */

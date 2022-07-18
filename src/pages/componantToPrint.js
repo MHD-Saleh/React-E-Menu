@@ -14,7 +14,7 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
             Table No {props.TableNumber}
           </Typography>
           <QRCodeReact
-            value={`${window.location.origin}/tableNumber/${props.TableNumber}`}
+            value={`${props.domain}#${props.TableNumber}`}
             size={200}
           />
         </Typography>

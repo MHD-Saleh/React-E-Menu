@@ -134,6 +134,10 @@ const EditType = () => {
       console.error(e);
       handelClick();
       setmessage("error with add Type");
+      if (e.response.status === 401) {
+        navigate("/login");
+        localStorage.removeItem("mytoken");
+      }
     }
   };
 
@@ -160,6 +164,10 @@ const EditType = () => {
       console.error(e);
       handelClick();
       setmessage("error with update type");
+      if (e.response.status === 401) {
+        navigate("/login");
+        localStorage.removeItem("mytoken");
+      }
     }
   };
 
@@ -179,6 +187,10 @@ const EditType = () => {
     } catch (e) {
       // handle error
       console.error(e);
+      if (e.response.status === 401) {
+        navigate("/login");
+        localStorage.removeItem("mytoken");
+      }
       // handelClick();
       //setmessage("error with Delete item");
     }
@@ -200,6 +212,10 @@ const EditType = () => {
     } catch (e) {
       // handle error
       console.error(e);
+      if (e.response.status === 401) {
+        navigate("/login");
+        localStorage.removeItem("mytoken");
+      }
       handelClick();
       setmessage("error with get Type List");
     }

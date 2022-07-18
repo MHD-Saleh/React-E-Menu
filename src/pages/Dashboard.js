@@ -36,13 +36,7 @@ const MainStyle = styled("div")(({ theme }) => ({
 export default function DashboardLayout() {
   const navigate = useNavigate();
 
-  const GetMenu = async () => {
-    await axios.get("http://localhost:8000/api/productView").catch((err) => {});
-  };
-
-  useEffect(() => {
-    GetMenu();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <RootStyle>

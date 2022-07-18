@@ -3,11 +3,12 @@ import { fiFI } from "@mui/material/locale";
 import React, { useEffect } from "react";
 import instance from "../authConfig/axios";
 import Reports from "../pages/Reports";
+import moment from "moment";
 
-function MounthlyR() {
+function MounthlyR(props) {
   const [isloading, setisloading] = React.useState(true);
 
-  const [Reportt, setReportt] = React.useState({});
+  const [Reportt, setReportt] = React.useState([]);
 
   const [dataa, setdataa] = React.useState([
     {
@@ -86,6 +87,11 @@ function MounthlyR() {
         qtu: 3,
         created_at: "2022-07-12T13:15:18.000000Z",
       },
+      {
+        name: "drinks",
+        qtu: 10,
+        created_at: "2022-07-12T13:15:18.000000Z",
+      },
     ];
 
     const unique = [...new Set(Backend.map((item) => item.name))];
@@ -111,18 +117,72 @@ function MounthlyR() {
       data: my_data,
     });
 
-    setdataa((arr) => [
+    /*setdataa((arr) => [
       ...arr,
       {
         name: "Chicken",
         type: "column",
         data: my_data,
       },
-    ]);
+    ]);*/
 
     console.log("dataa : " + JSON.stringify(dataa));
 
     console.log("array testing : " + JSON.stringify(my_arr));
+  };
+
+  ///api/teeest
+
+  const GetMounthly = async () => {
+    try {
+      await instance({
+        url: "api/teeest",
+        method: "GET",
+      })
+        .then((res) => {
+          setReportt(props.data);
+        })
+        .then((dat) => {
+          console.log("row data : " + JSON.stringify(props.data));
+
+          const filterd_1 = props.data.filter((r) => r.name === "Roasted");
+          const filterd_2 = props.data.filter((r) => r.name === "Shawarma");
+          const second_arr = [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0,
+          ];
+
+          const current = filterd_2.map((e) => e.date);
+
+          current.map((e) => console.log("date " + moment(e).format("DD")));
+
+          console.log(
+            "sum : " + filterd_2.filter((r) => r.date === "2022-07-12")[0].sum
+          );
+
+          for (let i = 0; i < current.length; i++) {
+            for (let j = 0; j < second_arr.length; j++) {
+              if (parseInt(moment(current[i]).format("DD")) === j) {
+                second_arr[j] = parseInt(
+                  filterd_2.filter((r) => r.date === current[i])[0].sum
+                );
+              }
+            }
+          }
+          setdataa([
+            {
+              name: "Chicken",
+              type: "column",
+              data: second_arr,
+            },
+          ]);
+          console.log(second_arr);
+
+          setisloading(false);
+        });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const Getrepo = async () => {
@@ -132,7 +192,7 @@ function MounthlyR() {
         method: "GET",
       }).then((res) => {
         // console.log("main data : " + JSON.stringify(res.data.report));
-        setReportt(res.data.report);
+        //setReportt(res.data.report);
         data = res.data.report;
         /*
         //console.log("Report data : " + JSON.stringify(data));
@@ -192,9 +252,53 @@ function MounthlyR() {
       console.error(e);
     }
   };
+
+  function rr() {
+    const filterd_2 = [
+      { name: "Shawarma", date: "2022-07-12", qty: "5" },
+      { name: "Shawarma", date: "2022-07-13", qty: "10" },
+      { name: "Shawarma", date: "2022-07-17", qty: "5" },
+    ];
+
+    console.log("second data : " + JSON.stringify(filterd_2));
+    const second_arr = [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    ];
+
+    const current = filterd_2.map((e) => e.date);
+
+    current.map((e) => console.log("date " + moment(e).format("DD")));
+
+    console.log(
+      "sum : " + filterd_2.filter((r) => r.date === "2022-07-12")[0].qty
+    );
+
+    for (let i = 0; i < current.length; i++) {
+      for (let j = 0; j < second_arr.length; j++) {
+        if (parseInt(moment(current[i]).format("DD")) === j) {
+          second_arr[j] = filterd_2.filter((r) => r.date === current[i])[0].qty;
+        }
+      }
+    }
+    console.log(second_arr);
+
+    /* for (let i = 0; i < 20; i++) {
+      try {
+        console.log("i : " + i);
+
+        if (typeof moment(filterd_2[i].date).format("DD") === "undefined") {
+          console.log("true");
+        }
+      } catch (e) {
+        console.log("err");
+      }
+    }*/
+  }
   useEffect(() => {
+    rr();
     Getrepo();
-    testing();
+    GetMounthly();
+    //testing();
   }, []);
 
   return (

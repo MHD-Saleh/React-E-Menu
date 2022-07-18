@@ -2,12 +2,12 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import { Button, createTheme, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Reports from "./Reports";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import instance from "../authConfig/axios";
 import Messages from "../componant/Messages";
 import Class from "../pages/Class";
@@ -16,6 +16,7 @@ import MounthlyR from "../componant/MounthlyR";
 
 export default function LabTabs() {
   const [isloading, setisloading] = React.useState(false);
+  const navigate = useNavigate();
 
   const [Count, setCount] = React.useState();
 
@@ -34,8 +35,30 @@ export default function LabTabs() {
     } catch (e) {
       // handle error
       console.error(e);
+      if (e.response.status === 401) {
+        navigate("/login");
+        localStorage.removeItem("mytoken");
+      }
     }
   };
+
+  const CHART_DATA = [
+    {
+      name: "Shawrmma",
+      type: "column",
+      data: [30, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
+    },
+    {
+      name: "Potato",
+      type: "area",
+      data: [20, 55, 41, 67, 22, 43, 21, 41, 30, 27, 43],
+    },
+    {
+      name: "falafel",
+      type: "line",
+      data: [25, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+    },
+  ];
 
   const CHART_DATA_1 = [
     {
@@ -69,15 +92,28 @@ export default function LabTabs() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const [Reportt, setReportt] = React.useState([]);
+
+  const GetMounthly = async () => {
+    try {
+      await instance({
+        url: "api/teeest",
+        method: "GET",
+      }).then((res) => {
+        setReportt(res.data);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   React.useEffect(() => {
     //GetMounthlyReports();
+    GetMounthly();
 
     getReadMessages();
     console.log("get repo");
   }, []);
-
-  var numb = 0;
 
   return (
     <>
@@ -106,10 +142,10 @@ export default function LabTabs() {
             </Box>
             <TabPanel value="1">Test</TabPanel>
             <TabPanel value="2">
-              <Reports CHART_DATA={CHART_DATA_1} />
+              <Reports CHART_DATA={CHART_DATA} />
             </TabPanel>
             <TabPanel value="3">
-              <MounthlyR />
+              <MounthlyR data={Reportt} />
             </TabPanel>
             <TabPanel value="4">
               <Messages />

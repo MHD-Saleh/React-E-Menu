@@ -17,6 +17,8 @@ const style = {
   borderRadius: 3,
   textAlign: "center",
   position: "absolute",
+  padding: "20px",
+  margin: "80px",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -24,7 +26,6 @@ const style = {
   bgcolor: "white",
   boxShadow: 24,
   p: 4,
-  overflow: "scroll",
 };
 
 const QrCodeModal = React.forwardRef((props, ref) => {
@@ -32,8 +33,37 @@ const QrCodeModal = React.forwardRef((props, ref) => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+
+  const tabels = [
+    {
+      name: "Foodies",
+      domain: "http://e-menu-h.herokuapp.com",
+      TabelNum: 1,
+    },
+    {
+      name: "Foodies",
+      domain: "http://e-menu-h.herokuapp.com",
+      TabelNum: 2,
+    },
+    {
+      name: "Foodies",
+      domain: "http://e-menu-h.herokuapp.com",
+      TabelNum: 3,
+    },
+    {
+      name: "Foodies",
+      domain: "http://e-menu-h.herokuapp.com",
+      TabelNum: 4,
+    },
+    {
+      name: "Foodies",
+      domain: "http://e-menu-h.herokuapp.com",
+      TabelNum: 5,
+    },
+  ];
   return (
     <Modal
+      sx={{ overflow: "scroll", margin: "20px" }}
       ref={ref}
       open={props.show}
       onClose={props.hide}
@@ -42,7 +72,7 @@ const QrCodeModal = React.forwardRef((props, ref) => {
     >
       <Box sx={style}>
         <Typography id="modal-modal-title" variant="h6" component="span">
-          Total tables: 2
+          Total tables: {tabels.length}
         </Typography>
 
         <Typography id="modal-modal-description" sx={{ mt: 5 }}>
@@ -51,26 +81,19 @@ const QrCodeModal = React.forwardRef((props, ref) => {
             spacing={{ xs: 2, md: 2 }}
             columns={{ xs: 4, sm: 8, md: 12 }}
           >
-            <Grid item xs={2} sm={4} md={4}>
-              <ComponentToPrint
-                ref={componentRef}
-                name="E-menu"
-                TableNumber="1"
-              />
-              <Button variant="contained" onClick={handlePrint}>
-                Print
-              </Button>
-            </Grid>
-            <Grid item xs={2} sm={4} md={4}>
-              <ComponentToPrint
-                ref={componentRef}
-                name="E-menu"
-                TableNumber="2"
-              />
-              <Button variant="contained" onClick={handlePrint}>
-                Print
-              </Button>
-            </Grid>
+            {tabels.map((item) => (
+              <Grid item xs={2} sm={4} md={4} key={item.id}>
+                <ComponentToPrint
+                  ref={componentRef}
+                  name={item.name}
+                  TableNumber={item.TabelNum}
+                  domain={item.domain}
+                />
+                <Button variant="contained" onClick={handlePrint}>
+                  Print
+                </Button>
+              </Grid>
+            ))}
           </Grid>
         </Typography>
       </Box>
@@ -89,3 +112,27 @@ export default QrCodeModal;
             </Stack>;
           }
         )}*/
+
+/*<Grid item xs={2} sm={4} md={4}>
+              <ComponentToPrint
+                ref={componentRef}
+                name="Foodies"
+                TableNumber="1"
+                domain="http://e-menu-h.herokuapp.com"
+              />
+              <Button variant="contained" onClick={handlePrint}>
+                Print
+              </Button>
+            </Grid>
+
+            <Grid item xs={2} sm={4} md={4}>
+              <ComponentToPrint
+                ref={componentRef}
+                name="Foodies"
+                TableNumber="2"
+                domain="http://e-menu-h.herokuapp.com"
+              />
+              <Button variant="contained" onClick={handlePrint}>
+                Print
+              </Button>
+            </Grid> */

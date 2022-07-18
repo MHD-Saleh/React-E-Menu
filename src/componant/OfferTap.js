@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -35,6 +36,7 @@ const theme = createTheme({
 });
 
 const OfferTap = () => {
+  const navigate = useNavigate();
   const handleSetType = (e) => {
     setType(e.target.value);
   };
@@ -90,6 +92,10 @@ const OfferTap = () => {
     } catch (e) {
       // handle error
       console.error(e);
+      if (e.response.status === 401) {
+        navigate("/login");
+        localStorage.removeItem("mytoken");
+      }
     }
   };
 
@@ -108,6 +114,10 @@ const OfferTap = () => {
     } catch (e) {
       // handle error
       console.error(e);
+      if (e.response.status === 401) {
+        navigate("/login");
+        localStorage.removeItem("mytoken");
+      }
     }
   };
 
@@ -133,6 +143,10 @@ const OfferTap = () => {
     } catch (e) {
       // handle error
       console.error(e);
+      if (e.response.status === 401) {
+        navigate("/login");
+        localStorage.removeItem("mytoken");
+      }
     }
   };
   useEffect(() => {
@@ -187,7 +201,7 @@ const OfferTap = () => {
         </Paper>
       </Grid>
       <Grid item xs={6}>
-        <Paper sx={{ padding: "50px", margin: "20px", height: "300px" }}>
+        <Paper sx={{ padding: "50px", margin: "20px" }}>
           <Grid container>
             <Grid item xs={6}>
               <FormControl>

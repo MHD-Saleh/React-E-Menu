@@ -6,7 +6,7 @@ i18n
   .use(initReactI18next)
   .use(HttpApi)
   .init({
-    fallbackLng: "ar",
+    fallbackLng: "en",
     debug: true,
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default

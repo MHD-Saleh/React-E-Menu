@@ -3,6 +3,7 @@ import SB from "../componant/SB";
 //import pusherJs from "pusher-js";
 
 import React, { useState } from "react";
+
 import {
   createTheme,
   Grid,
@@ -46,7 +47,7 @@ const Offers = () => {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Offer Edit" value="1" />
+            <Tab label="Gift Edit" value="1" />
             <Tab label=" Product Type" value="2" />
             <Tab label="Others" value="3" />
           </TabList>
