@@ -2,12 +2,17 @@ import Button from "@mui/material/Button";
 import SB from "../componant/SB";
 //import pusherJs from "pusher-js";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   createTheme,
+  FormControlLabel,
+  FormGroup,
   Grid,
   Paper,
+  Stack,
+  styled,
+  Switch,
   Tab,
   TextField,
   Typography,
@@ -18,23 +23,13 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import EditType from "../componant/editType";
 import instance from "../authConfig/axios";
 import OfferTap from "../componant/OfferTap";
+import i18next from "i18next";
+import MorePage from "../componant/MorePage";
 
 const Offers = () => {
   // Enable pusher logging
   // pusherJs.logToConsole = true;
   // pusherJs
-  /*
-  var pusher = new pusherJs("9aa6bd46d4105d1a9109", {
-    cluster: "ap2",
-  });
-
-  var channel = pusher.subscribe("saleh-channel");
-  channel.bind("event-pusher", function (data) {
-    console.error("pusher Says : ", data.data.message);
-    setmsg(data.data.message);
-    handelClickGreen();
-    //alert(JSON.stringify(data));
-  });*/
 
   const [value, setValue] = React.useState("1");
 
@@ -58,7 +53,9 @@ const Offers = () => {
         <TabPanel value="2">
           <EditType />
         </TabPanel>
-        <TabPanel value="3"> Page</TabPanel>
+        <TabPanel value="3">
+          <MorePage />
+        </TabPanel>
       </TabContext>
     </div>
   );

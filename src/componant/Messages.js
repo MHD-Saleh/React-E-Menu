@@ -213,7 +213,7 @@ function Messages() {
               <Grid key={msg.id} item xs={12} sm={6} md={3}>
                 <MessageCard
                   avatar={msg.id}
-                  title={msg.customer_id}
+                  title={msg.customer.name}
                   date={moment(msg.created_at).format("YYYY/MM/DD")}
                   content={msg.message}
                   expaned={msg.message}

@@ -13,6 +13,7 @@ import Messages from "../componant/Messages";
 import Class from "../pages/Class";
 import { Badge } from "@mui/material";
 import MounthlyR from "../componant/MounthlyR";
+import Daily from "../componant/Daily";
 
 export default function LabTabs() {
   const [isloading, setisloading] = React.useState(false);
@@ -106,11 +107,25 @@ export default function LabTabs() {
       console.error(e);
     }
   };
+  const [Dailyy, setDaily] = React.useState([]);
+
+  const GetDaily = async () => {
+    try {
+      await instance({
+        url: "api/dailyReport",
+        method: "GET",
+      }).then((res) => {
+        setDaily(res.data);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   React.useEffect(() => {
     //GetMounthlyReports();
     GetMounthly();
-
+    GetDaily();
     getReadMessages();
     console.log("get repo");
   }, []);
@@ -127,8 +142,8 @@ export default function LabTabs() {
                 onChange={handleChange}
                 aria-label="lab API tabs example"
               >
-                <Tab label="Dayli Report" value="1" />
-                <Tab label="Weackly Report" value="2" />
+                <Tab label="Daily Report" value="1" />
+                <Tab label="Daily Report" value="2" />
                 <Tab label="Mounthly Report" value="3" />
                 <Tab
                   label={
@@ -142,7 +157,7 @@ export default function LabTabs() {
             </Box>
             <TabPanel value="1">Test</TabPanel>
             <TabPanel value="2">
-              <Reports CHART_DATA={CHART_DATA} />
+              <Daily data={Dailyy} />
             </TabPanel>
             <TabPanel value="3">
               <MounthlyR data={Reportt} />
@@ -156,6 +171,8 @@ export default function LabTabs() {
     </>
   );
 }
+
+/* <Reports CHART_DATA={Daily} /> */
 
 //test
 /*{Reportt.map((elem, index) => (

@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   ButtonBase,
+  ButtonGroup,
   CardActions,
   CardHeader,
   Dialog,
@@ -18,7 +19,7 @@ import { DataGrid, GridColDef, GridApi, GridCellValue } from "@mui/x-data-grid";
 import Typography from "@mui/material/Typography";
 import React, { Children } from "react";
 
-const DialogPopup = (props) => {
+const DialogPopup = React.forwardRef((props, ref) => {
   const columns = [
     {
       field: "id",
@@ -52,7 +53,7 @@ const DialogPopup = (props) => {
   }));
 
   return (
-    <div>
+    <div ref={props.ref}>
       <Dialog open={props.open} onClose={props.Close}>
         <DialogTitle>
           <Typography sx={{ color: "#616161" }} variant="subtitle2">
@@ -113,11 +114,12 @@ const DialogPopup = (props) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={props.Close}>Cancel</Button>
+          <Button onClick={props.print}>print</Button>
         </DialogActions>
       </Dialog>
     </div>
   );
-};
+});
 
 export default DialogPopup;
 

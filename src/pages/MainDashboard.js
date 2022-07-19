@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
@@ -16,6 +16,9 @@ import "swiper/css/pagination";
 import "./styles.css";
 import moment from "moment";
 import img from "../image/bg.jpg";
+import { useReactToPrint } from "react-to-print";
+import ReactToPrint from "react-to-print";
+import pusherJs from "pusher-js";
 
 import {
   Avatar,
@@ -30,8 +33,18 @@ import instance from "../authConfig/axios";
 import MessageCard from "../componant/MessageCard";
 import DialogPopup from "../componant/DialogPopup";
 import CardMoreOption from "../componant/CardMoreOption";
+import { PrintPage } from "../componant/PrintPage";
 
 const MainDashboard = () => {
+  var pusher = new pusherJs("6fcfe21f0c128f7ed849", {
+    cluster: "ap2",
+  });
+
+  var channel = pusher.subscribe("new-order");
+  channel.bind("new order", function (data) {
+    alert(JSON.stringify(data));
+  });
+
   const [isloading, setisloading] = React.useState(true);
   const navigate = useNavigate();
 
@@ -180,6 +193,11 @@ const MainDashboard = () => {
     setOpen(false);
   };
 
+  let componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
   return (
     <>
       {isloading ? (
@@ -217,6 +235,7 @@ const MainDashboard = () => {
                 >
                   waiting Orders:
                 </Typography>
+
                 <Swiper
                   autoplay={{
                     delay: 3500,
@@ -340,7 +359,19 @@ const MainDashboard = () => {
             custName={username}
             ammount={odr.amount}
             tableNumber={odr.table_number}
+            print={() => handlePrint()}
           ></DialogPopup>
+          <div style={{ display: "none" }}>
+            <PrintPage
+              id={odr.id}
+              odr={grid}
+              time={odr.time}
+              custName={username}
+              ammount={odr.amount}
+              tableNumber={odr.table_number}
+              ref={componentRef}
+            />
+          </div>
         </div>
       )}
     </>

@@ -3,6 +3,11 @@ import {
   Box,
   Button,
   createTheme,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -19,6 +24,7 @@ import { useEffect, useState } from "react";
 import instance from "../authConfig/axios";
 import { useFormik, Form, FormikProvider } from "formik";
 import * as Yup from "yup";
+import EditIcon from "@mui/icons-material/Edit";
 
 const theme = createTheme({
   splitScreen: {
@@ -36,6 +42,7 @@ const theme = createTheme({
 });
 
 const OfferTap = () => {
+  const [isloading, setisloading] = useState(true);
   const navigate = useNavigate();
   const handleSetType = (e) => {
     setType(e.target.value);
@@ -75,6 +82,7 @@ const OfferTap = () => {
 
   const postType = async (nme, img) => {
     //api/typeStore
+
     try {
       await instance({
         // url of the api endpoint (can be changed)
@@ -123,6 +131,7 @@ const OfferTap = () => {
 
   const getType = async () => {
     //api/typeStore
+    setisloading(true);
     try {
       await instance({
         // url of the api endpoint (can be changed)
@@ -139,6 +148,7 @@ const OfferTap = () => {
         setaction(res.data.find((i) => i.active === true).id);
 
         console.log("changeType new active Type " + action);
+        setisloading(false);
       });
     } catch (e) {
       // handle error
@@ -159,252 +169,178 @@ const OfferTap = () => {
     changeType(event.target.value);
   };
 
+  const [open, setOpen] = useState(false);
+  const handelClick = () => {
+    setOpen(true);
+  };
+
+  const handelClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const [Edit_id, setEdit_id] = useState("");
+  const [EName, setEname] = useState("");
+  const [EImg, setEImg] = useState("");
+
+  const handleSetEditName = (e) => {
+    setEname(e.target.value);
+  };
+  const handleSetEditImg = (e) => {
+    setEImg(e.target.value);
+  };
+
   return (
-    <Grid container>
-      <Grid item xs={6}>
-        <Paper sx={{ padding: "50px", marginTop: "20px" }}>
-          <FormikProvider value={formik}>
-            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-              <Stack spacing={3}>
-                <TextField
-                  fullWidth
-                  autoComplete="name"
-                  type="name"
-                  label="name"
-                  {...getFieldProps("name")}
-                  error={Boolean(touched.name && errors.name)}
-                  helperText={touched.name && errors.name}
-                />
-
-                <TextField
-                  fullWidth
-                  autoComplete="image"
-                  type={"text"}
-                  label="image"
-                  {...getFieldProps("image")}
-                  error={Boolean(touched.image && errors.image)}
-                  helperText={touched.image && errors.image}
-                />
-              </Stack>
-
-              <Button
-                sx={{ marginTop: "20px" }}
+    <>
+      {isloading ? (
+        <>
+          <Typography variant="h2">Loading ...</Typography>
+        </>
+      ) : (
+        <>
+          <Dialog open={open} onClose={handelClose}>
+            <DialogTitle>Edit Item</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Edit the Details here and click update
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                type="text"
                 fullWidth
-                size="large"
-                type="submit"
-                variant="contained"
+                label="Item Name"
+                name="ItemName"
+                value={EName}
+                onChange={handleSetEditName}
+                error={EName === ""}
+                helperText={EName === "" ? "Please Enter Name" : ""}
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="image"
+                type="text"
+                fullWidth
+                label="Item Image"
+                name="ItemImage"
+                value={EImg}
+                onChange={handleSetEditImg}
+                error={EImg === ""}
+                helperText={EImg === "" ? "Please Enter image" : ""}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handelClose}>Cancel</Button>
+              <Button
+                onClick={() => {
+                  /*updateType(Edit_id);
+                  handleEditClose();*/
+                }}
               >
-                Add
+                Update
               </Button>
-            </Form>
-          </FormikProvider>
-        </Paper>
-      </Grid>
-      <Grid item xs={6}>
-        <Paper sx={{ padding: "50px", margin: "20px" }}>
+            </DialogActions>
+          </Dialog>
           <Grid container>
             <Grid item xs={6}>
-              <FormControl>
-                <FormLabel id="demo-error-radios">Select Type</FormLabel>
-                <RadioGroup
-                  aria-labelledby="demo-error-radios"
-                  name="type"
-                  value={action}
-                  onChange={handleRadioChange}
-                >
-                  {Types.map((item) => (
-                    <FormControlLabel
-                      key={item.id}
-                      value={item.id}
-                      control={<Radio />}
-                      label={`${item.name} , Used ${item.count} Times`}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
+              <Paper sx={{ padding: "50px", marginTop: "20px" }}>
+                <FormikProvider value={formik}>
+                  <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+                    <Stack spacing={3}>
+                      <TextField
+                        fullWidth
+                        autoComplete="name"
+                        type="name"
+                        label="name"
+                        {...getFieldProps("name")}
+                        error={Boolean(touched.name && errors.name)}
+                        helperText={touched.name && errors.name}
+                      />
+
+                      <TextField
+                        fullWidth
+                        autoComplete="image"
+                        type={"text"}
+                        label="image"
+                        {...getFieldProps("image")}
+                        error={Boolean(touched.image && errors.image)}
+                        helperText={touched.image && errors.image}
+                      />
+                    </Stack>
+
+                    <Button
+                      sx={{ marginTop: "20px" }}
+                      fullWidth
+                      size="large"
+                      type="submit"
+                      variant="contained"
+                    >
+                      Add
+                    </Button>
+                  </Form>
+                </FormikProvider>
+              </Paper>
             </Grid>
             <Grid item xs={6}>
-              <Stack direction="column" spacing={1}>
-                {Types.map((item) => (
-                  <ListItem key={item.id}>
-                    <img
-                      width={30}
-                      height={30}
-                      src={item.image}
-                      alt={item.image}
-                      loading="lazy"
-                    />
-                  </ListItem>
-                ))}
-              </Stack>
+              <Paper sx={{ padding: "50px", margin: "20px" }}>
+                <Grid container>
+                  <Grid item xs={6}>
+                    <FormControl>
+                      <FormLabel id="demo-error-radios">Select Type</FormLabel>
+                      <RadioGroup
+                        aria-labelledby="demo-error-radios"
+                        name="type"
+                        value={action}
+                        onChange={handleRadioChange}
+                      >
+                        {Types.map((item) => (
+                          <FormControlLabel
+                            key={item.id}
+                            value={item.id}
+                            control={<Radio />}
+                            label={`${item.name} , Used ${item.count} Times`}
+                          />
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Stack direction="column" spacing={1}>
+                      {Types.map((item) => (
+                        <ListItem key={item.id}>
+                          <img
+                            width={30}
+                            height={30}
+                            src={item.image}
+                            alt={item.image}
+                            loading="lazy"
+                          />
+                          <EditIcon
+                            sx={{ marginLeft: "20px" }}
+                            color="primary"
+                            onClick={() => {
+                              handelClick();
+                              setEdit_id(item.id);
+                              setEname(item.name);
+                              setEImg(item.image);
+                            }}
+                          />
+                        </ListItem>
+                      ))}
+                    </Stack>
+                  </Grid>
+                </Grid>
+              </Paper>
             </Grid>
           </Grid>
-        </Paper>
-      </Grid>
-    </Grid>
+        </>
+      )}
+    </>
   );
 };
 
 export default OfferTap;
-
-/* <FormControl>
-                <FormLabel id="radio-buttons-group-label">
-                  Select Type
-                </FormLabel>
-
-                <RadioGroup
-                  aria-labelledby="radio-buttons-group-label"
-                  defaultValue={action}
-                  name="radio-buttons-group"
-                  onChange={handleRadioChange}
-                >
-                  {Types.map((item) => (
-                    <FormControlLabel
-                      key={item.id}
-                      value={item.id}
-                      control={<Radio />}
-                      label={`${item.name} , Used ${item.count} Times`}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl> */
-
-/*<Grid container>
-     <Grid item xs={6}> 
-         ... 
-     </Grid>
-     <Grid item xs={6}>
-         ...
-     </Grid>
-</Grid> */
-
-/*  <Box
-      bgcolor="primary.main"
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        p: 1,
-        m: 1,
-        bgcolor: "background.paper",
-        borderRadius: 1,
-      }}
-    >
-      <div style={theme.splitScreen}>
-        <div style={theme.leftPane}>
-          <Typography
-            sx={{ mb: "25px", mt: "15px", fontFamily: "Monospace" }}
-            variant="subtitle1"
-          >
-            Items From Menu
-          </Typography>
-          <div style={{ height: 400, width: "100%" }}>
-            <Paper sx={{ padding: "50px", margin: "20px" }}>
-              <Typography variant="h3" sx={{ paddingBottom: "30px" }}>
-                Offer Name
-              </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  "& .MuiTextField-root": { width: "25ch" },
-                  alignItems: "center",
-                }}
-              >
-                <TextField
-                  sx={{ paddingBottom: "30px", width: "100px" }}
-                  margin="dense"
-                  id="offer"
-                  label="Offer Name"
-                  type="text"
-                  name="offer"
-                  value={Type}
-                  onChange={handleSetType}
-                />
-
-                <Button
-                  sx={{ width: "70px" }}
-                  color="primary"
-                  variant="contained"
-                  onClick={() => {
-                    postType();
-                  }}
-                >
-                  Submit
-                </Button>
-              </Box>
-            </Paper>
-          </div>
-        </div>
-        <div style={theme.rightPane}>
-          <Typography
-            sx={{ mb: "25px", mt: "15px", fontFamily: "Monospace" }}
-            variant="subtitle1"
-          >
-            Items From Products
-          </Typography>
-        </div>
-      </div>
-    </Box> */
-
-/*<Paper sx={{ padding: "50px", margin: "20px" }}>
-            <Typography variant="h3" sx={{ paddingBottom: "30px" }}>
-              Offer Name
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                "& .MuiTextField-root": { width: "25ch" },
-                alignItems: "center",
-              }}
-            >
-              <TextField
-                sx={{ paddingBottom: "30px", width: "100px" }}
-                margin="dense"
-                id="offer"
-                label="Offer Name"
-                type="text"
-                name="offer"
-                value={Type}
-                onChange={handleSetType}
-              />
-
-              <Button
-                sx={{ width: "70px" }}
-                color="primary"
-                variant="contained"
-                onClick={() => {
-                  postType();
-                }}
-              >
-                Submit
-              </Button>
-            </Box>
-          </Paper> */
-
-/*
-      <FormControl sx={{ m: 3 }} variant="standard">
-        <FormLabel id="demo-error-radios">Pop quiz: MUI is...</FormLabel>
-        <RadioGroup
-          aria-labelledby="demo-error-radios"
-          name="quiz"
-          value={value}
-          onChange={handleRadioChange}
-        >
-          <FormControlLabel
-            value="best"
-            control={<Radio />}
-            label="The best!"
-          />
-          <FormControlLabel
-            value="worst"
-            control={<Radio />}
-            label="The worst."
-          />
-        </RadioGroup>
-
-        <Button sx={{ mt: 1, mr: 1 }}  variant="outlined">
-          Check Answer
-        </Button>
-      </FormControl>
-    */
