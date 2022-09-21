@@ -2,16 +2,12 @@ import * as Yup from "yup";
 import moment from "moment";
 import checkoutFormModel from "./checkoutFormModel";
 const {
-  formField: { firstName, lastName, RestaurantName, TableNumber },
+  formField: { firstName, lastName, name, TableNumber },
 } = checkoutFormModel;
 
 export default [
   Yup.object().shape({
-    [firstName.name]: Yup.string().required(`${firstName.requiredErrorMsg}`),
-    [lastName.name]: Yup.string().required(`${lastName.requiredErrorMsg}`),
-    [RestaurantName.name]: Yup.string().required(
-      `${RestaurantName.requiredErrorMsg}`
-    ),
+    [name]: Yup.string().required("A radio option is required"),
   }),
   Yup.object().shape({
     [TableNumber.name]: Yup.number()

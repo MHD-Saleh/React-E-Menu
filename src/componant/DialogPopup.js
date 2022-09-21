@@ -15,9 +15,12 @@ import {
   Paper,
   styled,
 } from "@mui/material";
+import i18next from "i18next";
+
 import { DataGrid, GridColDef, GridApi, GridCellValue } from "@mui/x-data-grid";
 import Typography from "@mui/material/Typography";
 import React, { Children } from "react";
+import { useTranslation } from "react-i18next";
 
 const DialogPopup = React.forwardRef((props, ref) => {
   const columns = [
@@ -51,17 +54,18 @@ const DialogPopup = React.forwardRef((props, ref) => {
     textAlign: "center",
     color: theme.palette.text.secondary,
   }));
+  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
 
   return (
     <div ref={props.ref}>
       <Dialog open={props.open} onClose={props.Close}>
         <DialogTitle>
           <Typography sx={{ color: "#616161" }} variant="subtitle2">
-            Order Id : {props.id}
+            {i18n.t("Order_Id")} {props.id}
           </Typography>
 
           <Typography sx={{ color: "#616161" }} variant="subtitle2">
-            Customer Name : {props.custName}
+            {i18n.t("CustomerName")} {props.custName}
           </Typography>
         </DialogTitle>
         <DialogContent>
@@ -73,13 +77,13 @@ const DialogPopup = React.forwardRef((props, ref) => {
               columns={{ xs: 4, sm: 8, md: 12 }}
             >
               <Grid item xs={2} sm={4} md={4}>
-                <Item>Time</Item>
+                <Item>{i18n.t("Time")}</Item>
               </Grid>
               <Grid item xs={2} sm={4} md={4}>
-                <Item>Amount</Item>
+                <Item>{i18n.t("Amount")}</Item>
               </Grid>
               <Grid item xs={2} sm={4} md={4}>
-                <Item>Table Number</Item>
+                <Item>{i18n.t("Table_Number")}</Item>
               </Grid>
               <Grid item xs={2} sm={4} md={4}>
                 <Item>{props.time}</Item>
@@ -113,8 +117,8 @@ const DialogPopup = React.forwardRef((props, ref) => {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.Close}>Cancel</Button>
-          <Button onClick={props.print}>print</Button>
+          <Button onClick={props.Close}>{i18n.t("Cancel")}</Button>
+          <Button onClick={props.print}>{i18n.t("print")}</Button>
         </DialogActions>
       </Dialog>
     </div>

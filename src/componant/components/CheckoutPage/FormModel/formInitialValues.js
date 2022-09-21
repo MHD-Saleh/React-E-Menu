@@ -3,8 +3,4 @@ const {
   formField: { firstName, lastName, RestaurantName },
 } = checkoutFormModel;
 
-export default {
-  [firstName.name]: "",
-  [lastName.name]: "",
-  [RestaurantName.name]: "",
-};
+export default {};

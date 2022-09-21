@@ -288,13 +288,6 @@ function MounthlyR(props) {
       ) : (
         <>
           <Reports CHART_DATA={dataa} />
-          <Button
-            onClick={() => {
-              Getrepo();
-            }}
-          >
-            update
-          </Button>
         </>
       )}
     </>

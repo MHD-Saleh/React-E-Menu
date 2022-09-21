@@ -25,6 +25,7 @@ import instance from "../authConfig/axios";
 import OfferTap from "../componant/OfferTap";
 import i18next from "i18next";
 import MorePage from "../componant/MorePage";
+import { useTranslation } from "react-i18next";
 
 const Offers = () => {
   // Enable pusher logging
@@ -32,6 +33,7 @@ const Offers = () => {
   // pusherJs
 
   const [value, setValue] = React.useState("1");
+  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -42,9 +44,9 @@ const Offers = () => {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Gift Edit" value="1" />
-            <Tab label=" Product Type" value="2" />
-            <Tab label="Others" value="3" />
+            <Tab label={i18n.t("Gift")} value="1" />
+            <Tab label={i18n.t("Product_type")} value="2" />
+            <Tab label={i18n.t("Others")} value="3" />
           </TabList>
         </Box>
         <TabPanel value="1">

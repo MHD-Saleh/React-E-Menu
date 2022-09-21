@@ -34,19 +34,23 @@ import MessageCard from "../componant/MessageCard";
 import DialogPopup from "../componant/DialogPopup";
 import CardMoreOption from "../componant/CardMoreOption";
 import { PrintPage } from "../componant/PrintPage";
+import i18next from "i18next";
 
 const MainDashboard = () => {
-  var pusher = new pusherJs("6fcfe21f0c128f7ed849", {
+  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
+  /*var pusher = new pusherJs("6fcfe21f0c128f7ed849", {
     cluster: "ap2",
   });
 
   var channel = pusher.subscribe("new-order");
   channel.bind("new order", function (data) {
     alert(JSON.stringify(data));
-  });
+  });*/
 
   const [isloading, setisloading] = React.useState(true);
   const navigate = useNavigate();
+
+  var ggg = [];
 
   const [Cart, setCart] = useState([]);
   const [CartGoning, setCartGoning] = useState([]);
@@ -138,6 +142,7 @@ const MainDashboard = () => {
         // handle success
         GetCartGoning();
         GetCart();
+        GetCartDone();
       });
     } catch (e) {
       // handle error
@@ -201,12 +206,12 @@ const MainDashboard = () => {
   return (
     <>
       {isloading ? (
-        <Typography variant="h2">Loading ...</Typography>
+        <Typography variant="h2">{i18n.t("loading")}</Typography>
       ) : (
         <div>
           {Cart.length === 0 ? (
             <>
-              <Typography variant="h2">nothink here</Typography>
+              <Typography variant="h2">{i18n.t("nothink")}</Typography>
               <Box display="flex" alignItems="center" justifyContent="center">
                 <img src={img} alt="login" />
               </Box>
@@ -222,10 +227,11 @@ const MainDashboard = () => {
               >
                 <Typography
                   sx={{
-                    marginBottom: "10px",
+                    marginBottom: "30px",
                     paddingLeft: "20px",
                     paddingTop: "5px",
-                    width: 280,
+                    paddingBottom: "10px",
+                    width: 340,
                     height: 50,
                     backgroundColor: "primary.main",
                     color: "white",
@@ -233,7 +239,7 @@ const MainDashboard = () => {
                   }}
                   variant="h3"
                 >
-                  waiting Orders:
+                  {i18n.t("waiting")}
                 </Typography>
 
                 <Swiper
@@ -252,13 +258,13 @@ const MainDashboard = () => {
                   spaceBetween={20}
                   slidesPerView={3}
                 >
-                  {Cart.map((elem) => (
+                  {Cart.map((elem, index) => (
                     <SwiperSlide key={elem.id}>
                       <CurrenOrder
                         amount={elem.amount}
                         state={elem.status}
                         table={elem.table_number}
-                        id={elem.id}
+                        id={index + 1}
                         time={elem.time}
                         click={() => {
                           // handelMoreInfo(elem.id);
@@ -295,7 +301,7 @@ const MainDashboard = () => {
             }}
             variant="h3"
           >
-            Going on Orders:
+            {i18n.t("Going")}
           </Typography>
           <Grid sx={{ marginTop: "20px" }} container spacing={3}>
             {CartGoning.map((item) => {
@@ -328,7 +334,7 @@ const MainDashboard = () => {
             }}
             variant="h3"
           >
-            Serverd Orders:
+            {i18n.t("Serverd")}
           </Typography>
           <Grid sx={{ marginTop: "20px" }} container spacing={3}>
             {CartDone.map((item) => {
@@ -422,9 +428,15 @@ const CurrenOrder = (probs) => {
         <Typography sx={{ fontSize: 14 }} color="green" gutterBottom>
           {i18n.t("price")} {probs.amount}
         </Typography>
-        <Typography variant="h5" component="div">
-          {i18n.t("table_no")} {probs.table}
-        </Typography>
+        {probs.table === 0 ? (
+          <Typography variant="h5" color={"red"} component="div">
+            {i18n.t("outdoor")}
+          </Typography>
+        ) : (
+          <Typography variant="h5" component="div">
+            {i18n.t("table_no")} {probs.table}
+          </Typography>
+        )}
 
         <Typography variant="body2">{probs.detiles}</Typography>
         <CardActions sx={{ justifyContent: "center" }}>

@@ -3,7 +3,6 @@ import { fiFI } from "@mui/material/locale";
 import React, { useEffect } from "react";
 import instance from "../authConfig/axios";
 import Reports from "../pages/Reports";
-import moment from "moment";
 
 function Daily(props) {
   console.log("tessst : " + JSON.stringify(props.data));
@@ -33,7 +32,6 @@ function Daily(props) {
         })
         .then((dat) => {
           console.log("row data : " + JSON.stringify(props.data));
-
           const unique = [...new Set(props.data.map((item) => item.name))];
           console.log("uniiiiiq : " + unique);
 
@@ -176,13 +174,6 @@ function Daily(props) {
       ) : (
         <>
           <Reports CHART_DATA={dataa} />
-          <Button
-            onClick={() => {
-              Getrepo();
-            }}
-          >
-            update
-          </Button>
         </>
       )}
     </>

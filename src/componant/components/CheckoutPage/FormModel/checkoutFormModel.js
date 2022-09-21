@@ -1,5 +1,26 @@
 export default {
   formId: "checkoutForm",
+  name: "test1",
+  domain: "test",
+  formField: {
+    name: {
+      name: "firstName",
+      label: "First name*",
+      requiredErrorMsg: "First name is required",
+    },
+  },
+
+  formField: {
+    TableNumber: {
+      name: "TableNumber",
+      label: "Table Number*",
+      requiredErrorMsg: "Table Number is required",
+    },
+  },
+};
+
+/*export default {
+  formId: "checkoutForm",
   formField: {
     firstName: {
       name: "firstName",
@@ -23,3 +44,4 @@ export default {
     },
   },
 };
+ */

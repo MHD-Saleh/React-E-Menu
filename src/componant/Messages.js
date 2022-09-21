@@ -77,6 +77,8 @@ function Messages() {
     fontWeight: "bold",
   };
 
+  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
+
   const [isloading, setisloading] = useState(true);
 
   const [ReadMesagges, setReadMesagges] = useState([]);
@@ -171,7 +173,7 @@ function Messages() {
     <>
       {" "}
       {isloading ? (
-        <Typography variant="h3">Loading...</Typography>
+        <Typography variant="h3">{i18n.t("loading")}</Typography>
       ) : (
         <>
           <ToggleButtonGroup
@@ -188,7 +190,7 @@ function Messages() {
               }}
               value="All"
             >
-              All
+              {i18n.t("all")}
             </ToggleButton>
             <ToggleButton
               onClick={() => {
@@ -196,7 +198,7 @@ function Messages() {
               }}
               value="Read"
             >
-              Read
+              {i18n.t("Read")}
             </ToggleButton>
             <ToggleButton
               onClick={() => {
@@ -204,7 +206,7 @@ function Messages() {
               }}
               value="unread"
             >
-              unread
+              {i18n.t("unread")}
             </ToggleButton>
           </ToggleButtonGroup>
 

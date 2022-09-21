@@ -12,6 +12,9 @@ import {
   IconButton,
   InputAdornment,
   FormControlLabel,
+  FormGroup,
+  Switch,
+  Typography,
 } from "@mui/material";
 //import { LoadingButton } from "@mui/lab";
 // component
@@ -20,6 +23,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
+import i18next from "i18next";
 
 // ----------------------------------------------------------------------
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -65,7 +69,8 @@ export default function LoginForm() {
           "Authorization"
         ] = `Bearer ${res.data["token:"]}`;
         localStorage.setItem("mytoken", res.data["token:"]);
-        navigate("/dashboard/Dishes", { replace: true });
+
+        navigate("/welcome", { replace: true });
       })
       .catch((err) => {
         console.log(err);
@@ -140,6 +145,18 @@ export default function LoginForm() {
     setShowPassword((show) => !show);
   };
 
+  const [checked, setChecked] = useState(false);
+
+  const switchHandler = (event) => {
+    setChecked(event.target.checked);
+
+    i18next.changeLanguage(i18next.language === "en" ? "ar" : "en");
+  };
+
+  useEffect(() => {
+    setChecked(i18next.language === "en" ? true : false);
+  }, []);
+
   return (
     <>
       <FormikProvider value={formik}>
@@ -195,15 +212,13 @@ export default function LoginForm() {
               label={i18n.t("Remember_me")}
             />
 
-            <Link
-              onClick={handelClick}
-              component={RouterLink}
-              variant="subtitle2"
-              to="#"
-              underline="hover"
-            >
-              {i18n.t("forget_pass")}
-            </Link>
+            <FormGroup>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Typography>عربي</Typography>
+                <Switch checked={checked} onChange={switchHandler} />
+                <Typography>English</Typography>
+              </Stack>
+            </FormGroup>
           </Stack>
 
           <Button fullWidth size="large" type="submit" variant="contained">

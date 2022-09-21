@@ -10,7 +10,6 @@ import i18next from "i18next";
 import React, { useEffect, useState } from "react";
 
 const MorePage = () => {
-  const [Lang, setLang] = React.useState("");
   const [checked, setChecked] = useState(false);
 
   const switchHandler = (event) => {
@@ -20,8 +19,6 @@ const MorePage = () => {
   };
 
   useEffect(() => {
-    setLang(i18next.language);
-
     setChecked(i18next.language === "en" ? true : false);
   }, []);
   return (

@@ -11,6 +11,7 @@ import LabTabs from "./pages/Tabs";
 import User from "./pages/UsersList";
 import MainDashboard from "./pages/MainDashboard";
 import Welcome from "./pages/FirstTime";
+import WelcomeScreen from "./pages/Welcome";
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +45,7 @@ export default function Router() {
     },
     {
       path: "/welcome",
-      element: <Welcome />,
+      element: <WelcomeScreen />,
     },
   ]);
 }

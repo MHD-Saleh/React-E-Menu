@@ -25,6 +25,7 @@ import instance from "../authConfig/axios";
 import { useFormik, Form, FormikProvider } from "formik";
 import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
+import { useTranslation } from "react-i18next";
 
 const theme = createTheme({
   splitScreen: {
@@ -42,6 +43,7 @@ const theme = createTheme({
 });
 
 const OfferTap = () => {
+  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
   const [isloading, setisloading] = useState(true);
   const navigate = useNavigate();
   const handleSetType = (e) => {
@@ -196,16 +198,14 @@ const OfferTap = () => {
     <>
       {isloading ? (
         <>
-          <Typography variant="h2">Loading ...</Typography>
+          <Typography variant="h2">{i18n.t("loading")}</Typography>
         </>
       ) : (
         <>
           <Dialog open={open} onClose={handelClose}>
-            <DialogTitle>Edit Item</DialogTitle>
+            <DialogTitle>{i18n.t("Edit_Item")}</DialogTitle>
             <DialogContent>
-              <DialogContentText>
-                Edit the Details here and click update
-              </DialogContentText>
+              <DialogContentText>{i18n.t("enter_edit")}</DialogContentText>
               <TextField
                 autoFocus
                 margin="dense"
@@ -279,7 +279,7 @@ const OfferTap = () => {
                       type="submit"
                       variant="contained"
                     >
-                      Add
+                      {i18n.t("add")}
                     </Button>
                   </Form>
                 </FormikProvider>

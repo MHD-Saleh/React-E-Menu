@@ -170,12 +170,12 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             <Avatar src="M" alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                {localStorage.getItem("mytoken") ? "foodies" : i18n.t("Login")}
-              </Typography>
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 {localStorage.getItem("mytoken")
                   ? localStorage.getItem("RestName")
                   : i18n.t("Login")}
+              </Typography>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                {localStorage.getItem("mytoken") ? "admin" : i18n.t("Login")}
               </Typography>
             </Box>
           </AccountStyle>

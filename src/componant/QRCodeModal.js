@@ -6,12 +6,14 @@ import {
   Typography,
   Grid,
   Button,
+  getAvatarGroupUtilityClass,
 } from "@mui/material";
 import QRCodeReact from "qrcode.react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import React from "react";
 import { useReactToPrint } from "react-to-print";
 import { ComponentToPrint } from "../pages/componantToPrint";
+import { number } from "prop-types";
 
 const style = {
   borderRadius: 3,
@@ -34,6 +36,11 @@ const QrCodeModal = React.forwardRef((props, ref) => {
     content: () => componentRef.current,
   });
 
+  //var tabels = [];
+  //const [tabels, settabels] = useEffect([]);
+  var Restname;
+  var RestDomain;
+  var numbe;
   const tabels = [
     {
       name: "Foodies",
@@ -61,6 +68,24 @@ const QrCodeModal = React.forwardRef((props, ref) => {
       TabelNum: 5,
     },
   ];
+
+  const getarr = async () => {
+    Restname = await localStorage.getItem("RestName");
+    RestDomain = await localStorage.getItem("RestDomain");
+    numbe = await parseInt(localStorage.getItem("tabelNumber"));
+    for (const i = 0; i < number; i++) {
+      /*settabels({
+        name: Restname,
+        domain: RestDomain,
+        TabelNum: i,
+      });*/
+    }
+  };
+
+  useEffect(() => {
+    //getarr();
+  }, []);
+
   return (
     <Modal
       sx={{ overflow: "scroll", margin: "20px" }}

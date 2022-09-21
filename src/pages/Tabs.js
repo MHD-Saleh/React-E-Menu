@@ -14,8 +14,12 @@ import Class from "../pages/Class";
 import { Badge } from "@mui/material";
 import MounthlyR from "../componant/MounthlyR";
 import Daily from "../componant/Daily";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 
 export default function LabTabs() {
+  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
+
   const [isloading, setisloading] = React.useState(false);
   const navigate = useNavigate();
 
@@ -88,7 +92,7 @@ export default function LabTabs() {
     },
   ];
 
-  const [value, setValue] = React.useState("1");
+  const [value, setValue] = React.useState("2");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -133,7 +137,7 @@ export default function LabTabs() {
   return (
     <>
       {isloading ? (
-        <Typography variant="h3">Loading....</Typography>
+        <Typography variant="h3">{i18n.t("loading")}</Typography>
       ) : (
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
@@ -142,13 +146,13 @@ export default function LabTabs() {
                 onChange={handleChange}
                 aria-label="lab API tabs example"
               >
-                <Tab label="Daily Report" value="1" />
-                <Tab label="Daily Report" value="2" />
-                <Tab label="Mounthly Report" value="3" />
+                <Tab label={i18n.t("Daily")} value="1" />
+                <Tab label={i18n.t("Daily")} value="2" />
+                <Tab label={i18n.t("Mounthly")} value="3" />
                 <Tab
                   label={
                     <Badge badgeContent={Count} color="error">
-                      messages
+                      {i18n.t("Message")}
                     </Badge>
                   }
                   value="4"
