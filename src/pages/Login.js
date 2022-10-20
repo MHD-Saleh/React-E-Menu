@@ -6,7 +6,7 @@ import img from "../image/login.png";
 import { styled } from "@mui/material/styles";
 import { Card, Stack, Container, Typography } from "@mui/material";
 // components
-import myage from "../componant/Page";
+import myage from "../componant/mypage";
 import LoginForm from "../componant/loginform";
 import { useTranslation } from "react-i18next";
 // ----------------------------------------------------------------------

@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 
 import AuthLayout from "../componant/AuthLayout";
-import page from "../componant/Page";
+import page from "../componant/mypage";
 import { useFormik, Form, FormikProvider } from "formik";
 import * as Yup from "yup";
 import i18n from "../i18n";
