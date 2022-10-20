@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import { alpha, styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import table from "../image/setting.png";
 import {
-  createTheme,
   Paper,
   Button,
   FormControlLabel,
@@ -20,17 +19,14 @@ import {
 } from "@mui/material";
 
 import AuthLayout from "../componant/AuthLayout";
-import Page from "../componant/page";
+import page from "../componant/page";
 import { useFormik, Form, FormikProvider } from "formik";
 import * as Yup from "yup";
 import i18n from "../i18n";
 import axios from "axios";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 
-const APPBAR_MOBILE = 64;
-const APPBAR_DESKTOP = 92;
-
-const RootStyle = styled(Page)(({ theme }) => ({
+const RootStyle = styled(page)(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
     display: "flex",
   },
@@ -143,45 +139,6 @@ export default function WelcomeScreen(props) {
   });
 
   const { errors, touched, handleSubmit, getFieldProps } = formik;
-
-  const mydiv = styled("div")(({ theme }) => ({
-    splitScreen: {
-      display: "flex",
-      flexDirection: "row",
-    },
-    leftPane: {
-      width: "50%",
-      margin: "5px",
-    },
-    rightPane: {
-      width: "50%",
-      margin: "5px",
-      pt: "20px",
-      paddingTop: "10px",
-    },
-
-    [theme.breakpoints.up("lg")]: {
-      display: "flex",
-      flexDirection: "row",
-      splitScreen: {
-        display: "flex",
-        flexDirection: "row",
-      },
-      leftPane: {
-        width: "50%",
-        margin: "5px",
-      },
-      rightPane: {
-        width: "50%",
-        margin: "5px",
-        pt: "20px",
-        paddingTop: "10px",
-      },
-
-      minHeight: APPBAR_DESKTOP,
-      padding: theme.spacing(0, 5),
-    },
-  }));
 
   return (
     <RootStyle title="Login | Minimal-UI">

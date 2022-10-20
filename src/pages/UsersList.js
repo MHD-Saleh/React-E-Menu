@@ -148,8 +148,6 @@ export default function User() {
       console.error(e);
     }
   };
-
-  //api/customerView
   const getuser = async () => {
     try {
       await instance({
@@ -158,9 +156,8 @@ export default function User() {
         method: "GET",
       }).then((res) => {
         // handle success
-        console.log(res.data);
+
         setdata(res.data);
-        console.log("userlist data", data);
       });
     } catch (e) {
       // handle error
@@ -169,6 +166,9 @@ export default function User() {
       // setmessage("error with get product List");
     }
   };
+
+  //api/customerView
+
   useEffect(() => {
     getuser();
   }, []);

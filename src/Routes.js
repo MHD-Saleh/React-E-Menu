@@ -35,7 +35,7 @@ export default function Router() {
       path: "/",
       element: <DashboardLayout />,
       children: [
-        { path: "/", element: <Navigate to="/dashboard" /> },
+        { path: "/", element: <Navigate to="/dashboard/main" /> },
         { path: "home", element: <Home /> },
         { path: "login", element: <Login /> },
         { path: "404", element: <Page404 /> },

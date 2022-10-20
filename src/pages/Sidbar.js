@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 // material
 import { styled } from "@mui/material/styles";
@@ -12,14 +12,12 @@ import {
   Avatar,
   Stack,
 } from "@mui/material";
-import { Badge } from "@mui/material";
 
 import useResponsive from "../componant/useresponsive";
 import Scrollbar from "../componant/Scrollbar";
 import NavSection from "../componant/NavSection";
 import QrCodeModal from "../componant/QRCodeModal";
 
-import axios from "axios";
 import img from "../image/Emenu-logo.png";
 import { useTranslation } from "react-i18next";
 import Iconify from "../componant/Iconify";
@@ -54,7 +52,7 @@ DashboardSidebar.propTypes = {
 const getIcon = (name) => <Iconify icon={name} width={22} height={22} />;
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
-  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
+  const { i18n } = useTranslation("ns1", { useSuspense: false });
 
   const sidebarConfigNotLoged = [
     //localStorage.setItem("islogin", "true");
@@ -132,8 +130,6 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const [QRCode, setQRCode] = useState(false);
   const showQRModal = () => setQRCode(true);
   const hideQRModal = () => setQRCode(false);
-
-  const componentRef = useRef();
 
   const [loged, setloged] = useState(false);
 

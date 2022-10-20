@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import { Typography } from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -12,11 +12,11 @@ import { Badge } from "@mui/material";
 import MounthlyR from "../componant/MounthlyR";
 import Daily from "../componant/Daily";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 export default function LabTabs() {
   const { i18n } = useTranslation("ns1", { useSuspense: false });
 
-  const [isloading, setisloading] = React.useState(false);
   const navigate = useNavigate();
 
   const [Count, setCount] = React.useState();
@@ -30,7 +30,7 @@ export default function LabTabs() {
         method: "GET",
       }).then((res) => {
         // handle success
-        console.log("length messages is : ", res.data.length);
+
         setCount(res.data.length);
       });
     } catch (e) {
@@ -77,52 +77,44 @@ export default function LabTabs() {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     //GetMounthlyReports();
     GetMounthly();
     GetDaily();
     getReadMessages();
-    console.log("get repo");
   }, []);
 
   return (
     <>
-      {isloading ? (
-        <Typography variant="h3">{i18n.t("loading")}</Typography>
-      ) : (
-        <Box sx={{ width: "100%", typography: "body1" }}>
-          <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <TabList
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                <Tab label={i18n.t("Daily")} value="1" />
-                <Tab label={i18n.t("Daily")} value="2" />
-                <Tab label={i18n.t("Mounthly")} value="3" />
-                <Tab
-                  label={
-                    <Badge badgeContent={Count} color="error">
-                      {i18n.t("Message")}
-                    </Badge>
-                  }
-                  value="4"
-                />
-              </TabList>
-            </Box>
-            <TabPanel value="1">Test</TabPanel>
-            <TabPanel value="2">
-              <Daily data={Dailyy} />
-            </TabPanel>
-            <TabPanel value="3">
-              <MounthlyR data={Reportt} />
-            </TabPanel>
-            <TabPanel value="4">
-              <Messages />
-            </TabPanel>
-          </TabContext>
-        </Box>
-      )}
+      <Box sx={{ width: "100%", typography: "body1" }}>
+        <TabContext value={value}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab label={i18n.t("Daily")} value="1" />
+              <Tab label={i18n.t("Daily")} value="2" />
+              <Tab label={i18n.t("Mounthly")} value="3" />
+              <Tab
+                label={
+                  <Badge badgeContent={Count} color="error">
+                    {i18n.t("Message")}
+                  </Badge>
+                }
+                value="4"
+              />
+            </TabList>
+          </Box>
+          <TabPanel value="1">Test</TabPanel>
+          <TabPanel value="2">
+            <Daily data={Dailyy} />
+          </TabPanel>
+          <TabPanel value="3">
+            <MounthlyR data={Reportt} />
+          </TabPanel>
+          <TabPanel value="4">
+            <Messages />
+          </TabPanel>
+        </TabContext>
+      </Box>
     </>
   );
 }

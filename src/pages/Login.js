@@ -43,12 +43,8 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 export default function Login() {
-  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
+  const { i18n } = useTranslation("ns1", { useSuspense: false });
   const [open, setopen] = useState(false);
-
-  const handelClick = () => {
-    setopen(true);
-  };
 
   const handelClose = (event, reason) => {
     if (reason === "clickaway") {

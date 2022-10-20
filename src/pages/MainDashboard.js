@@ -5,9 +5,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper";
 import "swiper/css";
@@ -17,9 +14,6 @@ import "./styles.css";
 import moment from "moment";
 import img from "../image/bg.jpg";
 import { useReactToPrint } from "react-to-print";
-import ReactToPrint from "react-to-print";
-import pusherJs from "pusher-js";
-
 import {
   Avatar,
   Box,
@@ -32,12 +26,10 @@ import { useTranslation } from "react-i18next";
 import instance from "../authConfig/axios";
 import MessageCard from "../componant/MessageCard";
 import DialogPopup from "../componant/DialogPopup";
-import CardMoreOption from "../componant/CardMoreOption";
 import { PrintPage } from "../componant/PrintPage";
-import i18next from "i18next";
 
 const MainDashboard = () => {
-  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
+  const { i18n } = useTranslation("ns1", { useSuspense: false });
   /*var pusher = new pusherJs("6fcfe21f0c128f7ed849", {
     cluster: "ap2",
   });
@@ -48,10 +40,6 @@ const MainDashboard = () => {
   });*/
 
   const [isloading, setisloading] = React.useState(true);
-  const navigate = useNavigate();
-
-  var ggg = [];
-
   const [Cart, setCart] = useState([]);
   const [CartGoning, setCartGoning] = useState([]);
   const [CartDone, setCartDone] = useState([]);
@@ -387,7 +375,7 @@ const MainDashboard = () => {
 export default MainDashboard;
 
 const CurrenOrder = (probs) => {
-  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
+  const { i18n } = useTranslation("ns1", { useSuspense: false });
 
   return (
     <Card

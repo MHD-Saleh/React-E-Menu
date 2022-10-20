@@ -4,10 +4,8 @@ import ReactApexChart from "react-apexcharts";
 import { Card, CardHeader, Box } from "@mui/material";
 
 import BaseOptionChart from "../componant/BaseOptionChart";
-import { useState } from "react";
 
 const Reports = (props) => {
-  const [test, settest] = useState("");
   const chartOptions = merge(BaseOptionChart(), {
     stroke: { width: [0, 2, 3] },
     plotOptions: { bar: { columnWidth: "11%", borderRadius: 4 } },

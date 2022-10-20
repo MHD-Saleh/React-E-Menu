@@ -1,6 +1,5 @@
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -29,18 +28,8 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
-
-// component
-
-// material
-
-// utils
-
-//
 import Label from "../componant/Label";
-import { AspectRatio } from "@mui/icons-material";
 import instance from "../authConfig/axios";
 
 //import Isauthed from "../componant/ChickAuth";
@@ -92,7 +81,6 @@ export default function ProductList({ ...other }) {
   const [Type, setType] = useState("");
   const [type_Id, settype_Id] = useState([]);
   const [CrtType, setCrtType] = useState();
-  const [type_num, settype_num] = useState();
 
   const handel_type = (event) => {
     setType(event.target.value);
@@ -125,10 +113,6 @@ export default function ProductList({ ...other }) {
   };
 
   const [edit, setEdit] = React.useState(false);
-
-  const handleEditOpen = () => {
-    setEdit(true);
-  };
 
   const handleEditClose = async () => {
     setEdit(false);
@@ -260,7 +244,6 @@ export default function ProductList({ ...other }) {
         method: "GET",
       }).then((res) => {
         // handle success
-        console.log(res.data);
         setdishs(res.data);
         setisloading(false);
       });
@@ -278,7 +261,6 @@ export default function ProductList({ ...other }) {
 
   useEffect(() => {
     GetMenu();
-
     TypeCatogory();
   }, []);
 
@@ -288,18 +270,9 @@ export default function ProductList({ ...other }) {
     setChecked(event.target.checked);
   };
 
-  const [allValues, setAllValues] = useState({
-    ItemName: "",
-    Price: "",
-    PriceSale: "",
-    Time: "",
-    Img: "",
-    desc: "",
-  });
-
-  const changeHandler = (e) => {
+  /*const changeHandler = (e) => {
     setAllValues({ ...allValues, [e.target.name]: e.target.value });
-  };
+  };*/
   const [EID, setEID] = useState("");
   const [EName, setEname] = useState("");
   const [Eprice, setEprice] = useState("");
@@ -308,11 +281,6 @@ export default function ProductList({ ...other }) {
   const [EImg, setEImg] = useState("");
   const [Edesc, setEdesc] = useState("");
   const [EStatus, setEStatus] = useState();
-  const [Etype, setEtype] = useState();
-
-  const handleEtype = (event) => {
-    setEtype(event.target.value);
-  };
 
   const handlesetEStatus = (event) => {
     setEStatus(event.target.checked);
@@ -430,8 +398,6 @@ export default function ProductList({ ...other }) {
                             variant="subtitle2"
                             noWrap
                             onClick={() => {
-                              setEtype(dishes.type_id);
-                              console.log(dishes.name);
                               setEname(dishes.name);
                               setEprice(dishes.price);
                               setEPriceSale(dishes.priceSale);
