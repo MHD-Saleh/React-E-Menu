@@ -1,5 +1,4 @@
-import { Button, Typography } from "@mui/material";
-import { fiFI } from "@mui/material/locale";
+import { Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import instance from "../authConfig/axios";
 import Reports from "../pages/Reports";

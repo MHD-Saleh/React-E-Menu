@@ -1,15 +1,11 @@
 import { filter } from "lodash";
-import { sentenceCase } from "change-case";
 import { useEffect, useState } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
 // material
 import {
   Card,
   Table,
   Stack,
   Avatar,
-  Button,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -19,13 +15,9 @@ import {
   TablePagination,
 } from "@mui/material";
 // components
-import page from "../componant/page";
-import Label from "../componant/Label";
 import Scrollbar from "../componant/Scrollbar";
-import Iconify from "../componant/Iconify";
 import SearchNotFound from "../componant/SearchNotFound";
 import { UserListHead, UserListToolbar, UserMoreMenu } from "../componant/user";
-import axios from "axios";
 import instance from "../authConfig/axios";
 import moment from "moment";
 //
@@ -33,16 +25,6 @@ import moment from "moment";
 //import USERLIST from "../componant/UserTest";
 
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  { id: "name", label: "Name", alignRight: false },
-  { id: "company", label: "Company", alignRight: false },
-  { id: "salary", label: "salary", alignRight: false },
-  { id: "role", label: "Role", alignRight: false },
-  { id: "isVerified", label: "Verified", alignRight: false },
-  { id: "status", label: "Status", alignRight: false },
-  { id: "" },
-];
 
 const New_TABLE_HEAD = [
   { id: "id", label: "id", alignRight: false },
@@ -101,7 +83,7 @@ export default function User() {
       role: "Main admin",
     },
   ]);
-  const navigate = useNavigate();
+
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
@@ -188,7 +170,6 @@ export default function User() {
     }
   };
   useEffect(() => {
-    console.log("updatinggggggg useEffect");
     getuser();
   }, []);
 

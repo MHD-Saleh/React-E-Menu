@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Container, Stack, Box, Typography, Grid } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import QRCodeReact from "qrcode.react";
 
 export const ComponentToPrint = React.forwardRef((props, ref) => {

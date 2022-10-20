@@ -1,24 +1,20 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import { Button, createTheme, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import Reports from "./Reports";
-import axios from "axios";
 import instance from "../authConfig/axios";
 import Messages from "../componant/Messages";
-import Class from "../pages/Class";
 import { Badge } from "@mui/material";
 import MounthlyR from "../componant/MounthlyR";
 import Daily from "../componant/Daily";
-import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 
 export default function LabTabs() {
-  const { t, i18n, ready } = useTranslation("ns1", { useSuspense: false });
+  const { i18n } = useTranslation("ns1", { useSuspense: false });
 
   const [isloading, setisloading] = React.useState(false);
   const navigate = useNavigate();
@@ -46,51 +42,6 @@ export default function LabTabs() {
       }
     }
   };
-
-  const CHART_DATA = [
-    {
-      name: "Shawrmma",
-      type: "column",
-      data: [30, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-    },
-    {
-      name: "Potato",
-      type: "area",
-      data: [20, 55, 41, 67, 22, 43, 21, 41, 30, 27, 43],
-    },
-    {
-      name: "falafel",
-      type: "line",
-      data: [25, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-    },
-  ];
-
-  const CHART_DATA_1 = [
-    {
-      name: "meets",
-      type: "column",
-      data: [
-        30, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 20, 55, 41, 67, 22, 43, 21,
-        41, 30, 27, 43, 41, 67, 22, 43, 21, 41, 30, 27, 43,
-      ],
-    },
-    {
-      name: "Potato",
-      type: "area",
-      data: [
-        20, 55, 41, 67, 22, 43, 21, 41, 30, 27, 43, 20, 55, 41, 67, 22, 43, 21,
-        41, 30, 27, 43, 20, 55, 41, 67, 22, 43, 21, 41, 30,
-      ],
-    },
-    {
-      name: "falafel",
-      type: "line",
-      data: [
-        25, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 25, 25, 36, 30, 45, 35, 64,
-        52, 59, 36, 39, 25, 25, 36, 30, 45, 35, 64, 52, 59,
-      ],
-    },
-  ];
 
   const [value, setValue] = React.useState("2");
 

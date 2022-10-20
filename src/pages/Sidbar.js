@@ -141,6 +141,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     if (localStorage.getItem("mytoken")) {
       setloged(true);
     } else {
+      navigate("/login");
       setloged(false);
     }
     if (isOpenSidebar) {
@@ -207,20 +208,33 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   return (
     <RootStyle>
       <QrCodeModal show={QRCode} hide={hideQRModal} />
+      {!isDesktop && (
+        <Drawer
+          open={isOpenSidebar}
+          onClose={onCloseSidebar}
+          PaperProps={{
+            sx: { width: DRAWER_WIDTH },
+          }}
+        >
+          {renderContent}
+        </Drawer>
+      )}
 
-      <Drawer
-        open={true}
-        variant="persistent"
-        PaperProps={{
-          sx: {
-            width: DRAWER_WIDTH,
-            bgcolor: "background.default",
-            borderRightStyle: "dashed",
-          },
-        }}
-      >
-        {renderContent}
-      </Drawer>
+      {isDesktop && (
+        <Drawer
+          open
+          variant="persistent"
+          PaperProps={{
+            sx: {
+              width: DRAWER_WIDTH,
+              bgcolor: "background.default",
+              borderRightStyle: "dashed",
+            },
+          }}
+        >
+          {renderContent}
+        </Drawer>
+      )}
     </RootStyle>
   );
 }

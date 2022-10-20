@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 // material
 import { styled } from "@mui/material/styles";
 import DashboardSidebar from "./Sidbar";
-import axios from "axios";
+import DashboardNavbar from "../componant/DashboardNavbar";
 //import DashboardNavbar from "../componant/MyNavBar";
 
 // ----------------------------------------------------------------------
@@ -25,7 +25,7 @@ const MainStyle = styled("div")(({ theme }) => ({
   paddingTop: APP_BAR_MOBILE + 24,
   paddingBottom: theme.spacing(10),
   [theme.breakpoints.up("lg")]: {
-    paddingTop: APP_BAR_DESKTOP + 24,
+    paddingTop: APP_BAR_DESKTOP + 85,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
@@ -34,13 +34,15 @@ const MainStyle = styled("div")(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function DashboardLayout() {
-  const navigate = useNavigate();
-
-  useEffect(() => {}, []);
+  const [open, setOpen] = useState(false);
 
   return (
     <RootStyle>
-      <DashboardSidebar isOpenSidebar={false} onCloseSidebar={() => false} />
+      <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
+      <DashboardSidebar
+        isOpenSidebar={open}
+        onCloseSidebar={() => setOpen(false)}
+      />
       <MainStyle>
         <Outlet />
       </MainStyle>
