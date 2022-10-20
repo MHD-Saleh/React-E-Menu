@@ -6,7 +6,7 @@ import { Box } from "@mui/material";
 
 // ----------------------------------------------------------------------
 
-const Page = forwardRef(({ children, title = "", ...other }, ref) => (
+const page = forwardRef(({ children, title = "", ...other }, ref) => (
   <Box ref={ref} {...other}>
     <title>{title}</title>
 
@@ -14,9 +14,9 @@ const Page = forwardRef(({ children, title = "", ...other }, ref) => (
   </Box>
 ));
 
-Page.propTypes = {
+page.propTypes = {
   children: PropTypes.node.isRequired,
   title: PropTypes.string,
 };
 
-export default Page;
+export default page;
