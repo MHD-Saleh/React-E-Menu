@@ -4,6 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import {
+  Box,
   Button,
   ButtonBase,
   createTheme,
@@ -353,7 +354,101 @@ const Add2Menu = () => {
           >
             Add to Menu Page
           </Typography>
-          <div style={theme.splitScreen}>
+
+          <Grid container spacing={2}>
+            <Grid item sm={12} xs={12} lg={6} xl={6} md={6}>
+              <Box textAlign="center">
+                <div>
+                  {" "}
+                  <Typography
+                    sx={{ mb: "25px", mt: "15px", fontFamily: "Monospace" }}
+                    variant="subtitle1"
+                  >
+                    Items From Menu
+                  </Typography>
+                  <div style={{ height: 400, width: "100%" }}>
+                    <DataGrid
+                      rows={Menu}
+                      columns={columns}
+                      pageSize={5}
+                      rowsPerPageOptions={[5]}
+                      sx={{
+                        "& .super-app-theme--header": {
+                          color: "white",
+                          backgroundColor: "primary.main",
+                        },
+                        border: 1,
+                        "& .MuiDataGrid-row:nth-child(even)": {
+                          backgroundColor: "#66bb6a",
+                        },
+
+                        borderColor: "primary.light",
+                        "& .MuiDataGrid-cell:hover": {
+                          color: "primary.main",
+                        },
+                      }}
+                    />
+                  </div>
+                </div>
+              </Box>
+            </Grid>
+            <Grid item sm={12} xs={12} lg={6} xl={6} md={6}>
+              <Box textAlign="center">
+                <div style={{ height: 400, width: "100%" }}>
+                  {" "}
+                  <Typography
+                    sx={{ mb: "25px", mt: "15px", fontFamily: "Monospace" }}
+                    variant="subtitle1"
+                  >
+                    Items From Products
+                  </Typography>
+                  <DataGrid
+                    rows={outOfMenu}
+                    columns={columns2}
+                    pageSize={5}
+                    rowsPerPageOptions={[5]}
+                    sx={{
+                      "& .super-app-theme--header": {
+                        color: "white",
+                        backgroundColor: "primary.main",
+                      },
+                      border: 1,
+                      borderColor: "primary.light",
+                      "& .MuiDataGrid-cell:hover": {
+                        color: "primary.main",
+                      },
+                    }}
+                  />
+                </div>
+              </Box>
+            </Grid>
+          </Grid>
+
+          <SB
+            open={openSuccess}
+            handelClose={handelCloseSuccess}
+            type="success"
+            message="Done"
+            time={3000}
+          />
+          <SB
+            open={openError}
+            handelClose={handelCloseError}
+            type="error"
+            message="error!"
+            time={3000}
+          />
+        </div>
+      )}
+    </>
+  );
+};
+
+export default Add2Menu;
+
+/*
+
+ <div style={theme.splitScreen}>
             <div style={theme.leftPane}>
               {" "}
               <Typography
@@ -413,24 +508,5 @@ const Add2Menu = () => {
               />
             </div>
           </div>
-          <SB
-            open={openSuccess}
-            handelClose={handelCloseSuccess}
-            type="success"
-            message="Done"
-            time={3000}
-          />
-          <SB
-            open={openError}
-            handelClose={handelCloseError}
-            type="error"
-            message="error!"
-            time={3000}
-          />
-        </div>
-      )}
-    </>
-  );
-};
 
-export default Add2Menu;
+*/

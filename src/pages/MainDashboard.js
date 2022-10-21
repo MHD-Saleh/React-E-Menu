@@ -139,6 +139,11 @@ const MainDashboard = () => {
   };
 
   useEffect(() => {
+    const getWidth = () => {
+      return window.innerWidth;
+    };
+    const mywidth = getWidth();
+    console.log("the width is : " + mywidth);
     GetCart();
     GetCartGoning();
     GetCartDone();
@@ -244,7 +249,23 @@ const MainDashboard = () => {
                   modules={[Navigation, Pagination, Autoplay]}
                   className="mySwiper"
                   spaceBetween={20}
-                  slidesPerView={3}
+                  //slidesPerView={1}
+                  breakpoints={{
+                    // when window width is >= 640px
+                    640: {
+                      width: 640,
+                      slidesPerView: 1,
+                    },
+                    // when window width is >= 768px
+                    768: {
+                      width: 768,
+                      slidesPerView: 2,
+                    },
+                    1200: {
+                      width: 1200,
+                      slidesPerView: 3,
+                    },
+                  }}
                 >
                   {Cart.map((elem, index) => (
                     <SwiperSlide key={elem.id}>

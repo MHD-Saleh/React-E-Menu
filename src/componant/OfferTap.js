@@ -246,7 +246,7 @@ const OfferTap = () => {
             </DialogActions>
           </Dialog>
           <Grid container>
-            <Grid item xs={6}>
+            <Grid item sm={12} xs={12} lg={6} xl={6} md={6}>
               <Paper sx={{ padding: "50px", marginTop: "20px" }}>
                 <FormikProvider value={formik}>
                   <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
@@ -285,7 +285,7 @@ const OfferTap = () => {
                 </FormikProvider>
               </Paper>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item sm={12} xs={12} lg={6} xl={6} md={6}>
               <Paper sx={{ padding: "50px", margin: "20px" }}>
                 <Grid container>
                   <Grid item xs={6}>
