@@ -19,14 +19,14 @@ import {
 } from "@mui/material";
 
 import AuthLayout from "../componant/AuthLayout";
-import page from "../componant/mypage";
+//import page from "../componant/mypage";
 import { useFormik, Form, FormikProvider } from "formik";
 import * as Yup from "yup";
 import i18n from "../i18n";
 import axios from "axios";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 
-const RootStyle = styled(page)(({ theme }) => ({
+const RootStyle = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
     display: "flex",
   },
